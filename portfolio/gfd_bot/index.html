@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta property="og:site_name" content="www.kruthers.com"/>
+        <meta property="og:title" content="Portfolio - Nicknames Ultimate"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:description" content="Welcome to my personal site and portfolio"/>
+        <meta property="og:image" content="../../assets/images/logo.png"/>
+        <title>Kruthers' Website - Nicknames Ultimate</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../../assets/css/main.css">
+        <link rel="stylesheet" href="./../projects.css">
+        <script src="../../assets/js/main.js"></script>
+        <script src="../projects.js"></script>
+    </head>
+    <body>
+        <div class="navbar" id="navbarDiv">
+            <ul id="navlist" class="">
+                <li><a href="../">Portfolio/ Projects</a></li>
+                <li><a href="../../about">About Me</a></li>
+                <li></li>
+                <li><a href="../../contact">Contact Me</a></li>
+            </ul>
+            <h1 id="center"><a href="../../">kruthers</a></h1>
+            <button id="mobile" onclick="getElementById('navlist').classList.toggle('show')"><span class="fas fa-bars"></span></button>
+        </div>
+        <div class="header-wrapper">
+            <!--<img src="./" />-->
+            <h1><i class="fas fa-robot"></i> Team GFD Discord Bot</h1>
+        </div>
+        <div class="body">
+            <div class="description">
+                <h1>The Bot</h1>
+                <p>
+                    The Team GFD discord bot was created to help organise and automate tasks in our discord. We host gamenights on a regular basis with normal 1 
+                    every Saturday in which we mainly play free to play games or Minecraft. As well as this we will also host a gamenight on a Wednesday depending 
+                    on who is around and about once to twice a month we host one on a Friday night where we play a paid for game like Garry's Mod.
+                    <br />
+                    In attempt to keep things more consistent and allow more people to host or know when they are going, we have created a bot to automate them.
+                    <br />
+                    This includes a system for people to subscribe for different roles and be notified what is going on. A system to automate my servers and 
+                    changings the games on them.
+                    <br />
+                    The bot is also responsible for handling things like posting links to resource packs we use, information about the games we are playing including 
+                    IPs, passwords, room codes and workshop links! (To do resource packs it also has a feature to allow us to automatically apply them to games and 
+                    upload them to a file server with a file hash to fix issues with people not always downloading the resourcepack)
+                    <br /><br />
+                    To help keep the discord clean it is also been upgraded with moderation capability’s and role, user and channel management.
+
+                </p>
+                <br />
+                <h2>Lanugue</h2>
+                <p>
+                    The bot is written in typescript and we have gone for a design that has allowed us to make it as modular as possible. It is then compiled into 
+                    JavaScript to run it.
+                </p>
+            </div>
+            <div class="credits">
+                <h1>What i did</h1>
+                <h2>Desginer & Programming</h2>
+                <p>
+                    Within the bot I have been responsible for writing the system for internet facing with my gamming servers, the system which manages roles and a 
+                    few admin commands. I have also been writing the core module of which most other modules will rely on. The main job of the core module is get 
+                    stored data from a database and load in commonly used features and debug arguments
+                    <br />
+                    To do the role management system I have written a system to create a announcement message and format them in a given channel, from there it 
+                    creates a message with a range of reactions added to it which people can then react to get a role or remove it.
+                </p>
+                <h2>Lead Storage manager</h2>
+                <p>
+                    As out of the developers I am one of the more experienced with MySQL, which we agreed was a better storage system due to the range of flexibility 
+                    it gives us. Part of this is future website support and it means the dev and main bot can access the same data when running on different machines.
+                    <br />
+                    I also helped write all the different SELECT, INSERT, UPDATE and DELETE statements as well as the code to run them and load data from them.
+                </p>
+                <h2>Hosting</h2>
+                <p>
+                    I am also responsible for the hosting of both the databases we are using and the Main bot which is running on the Team GFD discord Server. I am 
+                    also hosting a few dev sites to allow viewing the data as a whole for debugging easier and am working on a full website to integrate with the bot.
+                </p>
+            </div>
+            <div class="images">
+                <img id="top_image" alt="Bolt" src="./images/img_0.png"></img>
+                <img id="bottom_image" alt="Bolt" src="./images/img_0.png"></img>
+                <button onclick="backImage()" class="fas fa-chevron-left"></button>
+                <button onclick="stepImage()" class="fas fa-chevron-right" id="back"></button>
+                <script>        
+                    header = "img_";
+                    images = 12;
+                    stepImage()
+                </script>
+            </div>
+            <div class="download">
+                <a href="">Download comming soon</a>
+            </div>
+        </div>
+        <div class="footer-wrapper">
+            <ul>
+                <li>Website designed by kruthers</li>
+                <li>Custom Icons by <a href="https://fontawesome.com/">Font awsome</a></li>
+                <li><i class="far fa-copyright"></i>kruthers 2020</li>
+            </ul>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,57 @@
+
+.header-wrapper {
+    position: relative;
+    padding: 4em 0 2em 0;
+    width: 100%;
+    height: 40em;
+    background-color: rgb(70, 159, 211);
+    background-repeat: no-repeat;
+    background-size: 100%, 100%;
+    top: 0;
+}
+
+    .header-wrapper > img#logo {
+        top: 8em;
+        position: relative;
+        border-radius: 50%;
+        margin: 0;
+        width: 16em;
+    }
+
+    .header-wrapper > #description {
+        top: 6em;
+        display: inline-block;
+        position: relative;
+    }
+
+        .header-wrapper > #description > h1 {
+            width: 100%;
+            margin:auto;
+            line-height: 2em;
+            font-size: 220%;
+        }
+
+        .header-wrapper > #description > p {
+            width: 100%;
+            margin:auto;
+            line-height: 1.3em;
+            font-size: 120%;
+        }
+
+/* Body */
+
+.body {
+    font-size: 1.2em;
+}
+    .body h1 {
+        font-size: 1.4em;
+    }
+
+    .body > .container {
+        padding: 0;
+        margin: 0;
+    }
+
+        .body > .container > * > img {
+            width: 100%;
+        }

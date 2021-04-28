@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta property="og:site_name" content="kruthers.com"/>
+        <meta property="og:title" content="Portfolio - Security Guard 2"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:description" content="Welcome to my personal site and portfolio"/>
+        <meta property="og:image" content="../../assets/images/logo.png"/>
+        <title>Kruthers' Website - Security Guard 2</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../../assets/css/main.css">
+        <link rel="stylesheet" href="./../projects.css">
+        <script src="../../assets/js/main.js"></script>
+        <script src="../projects.js"></script>
+    </head>
+    <body>
+        <div class="navbar" id="navbarDiv">
+            <ul id="navlist" class="">
+                <li><a href="../">Portfolio/ Projects</a></li>
+                <li><a href="../../about">About Me</a></li>
+                <li></li>
+                <li><a href="../../contact">Contact Me</a></li>
+            </ul>
+            <h1 id="center"><a href="../../">kruthers</a></h1>
+            <button id="mobile" onclick="getElementById('navlist').classList.toggle('show')"><span class="fas fa-bars"></span></button>
+        </div>
+        <div class="header-wrapper">
+            <h1><i class="fas fa-shield-alt"></i> Security Guard 2 - Midnight Hiest</h1>
+        </div>
+        <div class="body">
+            <div class="description">
+                <h1>The map</h1>
+                <p>
+                    Security Guard 2 is a reimaging of the orginal <a href="https://dpeabody20.wixsite.com/dtplayers/post/security-guard"> Security guard Map</a>. <br />
+                    This new version has a masive new map, new relics, better AI and more things todo. This includes new gamemodes new wepons and potions.<br />
+                    The aim of the game is diffrent for the 2 teams. For the Theifs they need to try and steal all the required relics needed to escape, from here depending
+                    on the gamemode you may then have to get out of the map via one of the emergency exits!<br />
+                    A guards role is to stop as many relics getting stolen as possible by killing the theifs, both the AI and players! Be warned though the theifs have 2
+                    buff potions at their disposal, 1 will teleport them to a random location around the map, the other will make them invsible. Dont worry though 
+                    as you have a way to find them, in your hotbar you have a CCTV table that allows to to observe any cameras around the complex, but the theifs can 
+                    break them to try and hide so keep up your game.<br />
+                </p>
+                <br /><br />
+                <h3>The AI</h3>
+                <p> 
+                    The ai are villagers that can run around the map steeling relics, there difficault can be changes which changes how quick they move. They too 
+                    have the 2 bug potions and can use them, as well as this they will run away from you so be allert!
+                </p>
+                <h3>The Map</h3>
+                <p> 
+                    The Map consits mostly of 2 floors, upper and lower across these each room has a them and there are short cuts the theifs can unlock up stealing
+                    certen large relics, be carefull though as the guards can use them too! The relics are all representd by gold blocks on the ground which you shift
+                    on to capture!
+                </p>
+            </div>
+            <div class="credits">
+                <h1>What i did</h1>
+                <h2>Code Assistant</h2>
+                <p>
+                    Throught the project i helped in a range of ways, this was mostly helping the 2 main coders who did not have much expereince in 1.16 commands.
+                    Through out this i help optimise and get the AI working, The commands to get the relics breaking when stolen, the commands to return you to
+                    you place when leaving CCTV and making sure you could see out of a CCTV camer correctly!
+                </p>
+                <h2>Building</h2>
+                <p>
+                    To help make things as quick as possible i generated the commands to help us create all the struture blocks for the relics and i also help destroy
+                    and save around 50%. On top of this i also help build a few of them before they were destroyed.
+                </p>
+                <h2>Texturing</h2>
+                <p>
+                    For the map i helpd out with creating the textures of the menus in the lobby, and the textures used by the CCTV stands.
+                </p>
+                <br /><br /><br />
+                <h1>Full Cedits</h1>
+                <ul>
+                    <li>Project Leads | InternetAlien & BigNinjaChicken</li>
+                    <li>Lead Builders | BigNinjaChicken</li>
+                    <li>Game Design | InternetAlien, BigNinjaChicken, SirSheepe, Denniss, Me</li>
+                    <li>Commands | InternetAlien, Denniss, SirSheepe, Me</li>
+                    <li>Builders | BigNinjaChicken, InternetAlien, SirSheepe, Hentor5, Me</li>
+                    <li>Graphics | BigNinjaChicken, Raffhawk09</li>
+                </ul>
+            </div>
+            <div class="images">
+                <img id="top_image" alt="Bolt" src="./images/bolt_0.png"></img>
+                <img id="bottom_image" alt="Bolt" src="./images/bolt_0.png"></img>
+                <button onclick="backImage()" class="fas fa-chevron-right"></button>
+                <button onclick="stepImage()" class="fas fa-chevron-left" id="back"></button>
+                <script>        
+                    header = "img_";
+                    images = 3;
+                    stepImage()
+                </script>
+            </div>
+            <div class="download">
+                <a href="">Download comming soon</a>
+            </div>
+        </div>
+        <div class="footer-wrapper">
+            <ul>
+                <li>Website designed by kruthers</li>
+                <li>Custom Icons by <a href="https://fontawesome.com/">Font awsome</a></li>
+                <li><i class="far fa-copyright"></i>kruthers 2020</li>
+            </ul>
+        </div>
+    </body>
+</html>
