@@ -1,10 +1,11 @@
 <script lang="ts">
-    import {type PortfolioCardConfig, Tags} from "$lib/types/Portfoilio";
+    import {type PortfolioCardConfig} from "$lib/types/Portfoilio";
     import PortfolioCard from "$lib/components/portfolio/PortfolioCard.svelte";
     import Skill from "$lib/components/portfolio/Skill.svelte";
     import Language from "$lib/components/portfolio/Language.svelte";
     import SingleRow from "$lib/components/SingleRow.svelte";
     import MinecraftApi from "$lib/components/portfolio/MinecraftApi.svelte";
+    import PageInfo from "$lib/components/PageInfo.svelte";
 
     const pages: Array<PortfolioCardConfig> = [
         {
@@ -34,9 +35,10 @@
     ]
 </script>
 
-<head>
+<svelte:head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
-</head>
+</svelte:head>
+<PageInfo title="Portfolio" description="A full developer, project manager and systems administrator working on technical projects and in Java & Kotlin with experience in making websites, servers, plugins and mods" />
 
 <div class="min-h-full">
     <header class="bg-white shadow">

@@ -1,4 +1,8 @@
+<script>
+    import PageInfo from "$lib/components/PageInfo.svelte";
+</script>
 
+<PageInfo title="Downloads" description="Downloads for my projects" />
 
 <div class="hero bg-base-200 min-h-screen">
     <div class="hero-content text-center">

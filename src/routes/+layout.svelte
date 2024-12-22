@@ -3,6 +3,7 @@
     import NavMenu from "$lib/components/NavMenu.svelte";
     import NavBar from "$lib/components/NavBar.svelte";
     import type {NavEntry} from "$lib/types/NavBar";
+    import PageInfo from "$lib/components/PageInfo.svelte";
 	let { children } = $props();
 
 
@@ -16,6 +17,7 @@
 </script>
 
 <svelte:window bind:innerWidth />
+<PageInfo title="Unknown" description="No Description set" />
 
 <header class="col-auto">
     <div>
