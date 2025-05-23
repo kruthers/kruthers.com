@@ -14,6 +14,12 @@
         { name: "Portfolio", path: "/portfolio"},
         { name: "Downloads", path: "/downloads"}
     ]
+
+    //font awesome
+    import { config } from '@fortawesome/fontawesome-svg-core'
+
+    import '@fortawesome/fontawesome-svg-core/styles.css' // Import the CSS
+    config.autoAddCss = false
 </script>
 
 <svelte:window bind:innerWidth />
