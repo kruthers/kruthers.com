@@ -10,7 +10,7 @@
     const pages: Array<PortfolioCardConfig> = [
         {
             name: "Block Wars",
-            description: "A monthly minecraft event hosting a range of streamers from CaptainSparklez, Hannahxxrose to JoeBard & Papalatte.Previously has partnered with Twitch and Chipotle",
+            description: "A monthly minecraft event hosting a range of streamers from CaptainSparklez, Hannahxxrose to JoeBard & Papalatte. Previously has partnered with Twitch and Chipotle",
             roles: [ "Project Lead & Manager", "Developer", "Game Designer" ],
             tags: [],
             image: "blockwars.png",
