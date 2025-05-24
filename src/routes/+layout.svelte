@@ -1,19 +1,11 @@
 <script lang="ts">
 	import '../app.css';
-    import NavMenu from "$lib/components/NavMenu.svelte";
-    import NavBar from "$lib/components/NavBar.svelte";
-    import type {NavEntry} from "$lib/types/NavBar";
     import PageInfo from "$lib/components/PageInfo.svelte";
+    import NavDownloadOptions from "$lib/components/NavDownloadOptions.svelte";
+
 	let { children } = $props();
 
-
     let innerWidth = $state(0)
-
-    const pages: Array<NavEntry> = [
-        { name: "About Me", path: "/"},
-        { name: "Portfolio", path: "/portfolio"},
-        { name: "Downloads", path: "/downloads"}
-    ]
 
     //font awesome
     import { config } from '@fortawesome/fontawesome-svg-core'
@@ -26,19 +18,47 @@
 <PageInfo title="Unknown" description="No Description set" />
 
 <header class="col-auto">
-    <div>
-        {#if (innerWidth < 700)}
-            <NavMenu pages={pages} ></NavMenu>
-        {:else}
-            <NavBar pages={pages} ></NavBar>
-        {/if}
+    <div class="bg-primary shadow-sm">
+        <nav class="navbar mx-auto max-w-7xl px-2 lg:px-8">
+            <div class="navbar-start">
+                <div class="dropdown">
+                    <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
+                    </div>
+                    <ul class="menu menu-sm dropdown-content bg-accent rounded-box z-1 mt-3 w-52 p-2 shadow">
+                        <li><a href = "/">About Me</a></li>
+                        <li><a href = "/portfolio">Portfolio</a></li>
+                        <li>
+                            Downloads
+                            <NavDownloadOptions/>
+                        </li>
+                    </ul>
+                </div>
+                <img class="h-8 w-auto" src="/icon.png" alt="Your Company">
+            </div>
+            <div class="navbar-center hidden lg:flex">
+                <ul class="menu menu-horizontal px-1">
+                    <li><a href = "/">About Me</a></li>
+                    <li><a href = "/portfolio">Portfolio</a></li>
+                    <li>
+                        <details>
+                            <summary>Downloads</summary>
+                            <NavDownloadOptions/>
+                        </details>
+                    </li>
+                </ul>
+            </div>
+            <div class="navbar-end">
+                <!-- TODO: Auth related things -->
+            </div>
+        </nav>
     </div>
 </header>
 
 {@render children()}
 
 
-<footer class="footer sm:footer-horizontal bg-base-200 text-base-content p-10">
+<footer class="footer sm:footer-horizontal bg-neutral text-base-content p-10">
     <aside>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" height="50" width="50" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />

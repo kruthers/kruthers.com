@@ -6,7 +6,7 @@
     <title>Home - kruthers.com</title>
 </head>
 
-<div class="hero bg-base-200 min-h-screen">
+<div class="hero bg-base-100 min-h-screen">
     <div class="hero-content flex-col lg:flex-row">
         <img src="/icon.png" class="max-w-sm rounded-lg shadow-2xl" alt="Logo"/>
         <div>
