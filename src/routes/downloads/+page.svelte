@@ -6,10 +6,10 @@
 </script>
 
 <PageInfo title="Downloads" description="Downloads for my projects" />
-<div class="min-h-screen bg-base-300 max-w-7xl mx-auto lg:px-8 pt-8">
-    <ul>
+<div class="min-h-screen max-w-7xl mx-auto shadow-lg">
+    <div class="grid grid-cols-3 gap-0.5" >
         {#each data.projects as project}
-            <li><RawProjectCard data={project} /></li>
+            <RawProjectCard data={project} />
         {/each}
-    </ul>
+    </div>
 </div>
