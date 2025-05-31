@@ -4,7 +4,7 @@
     export var data: RawProject
 </script>
 
-<div class="card w-90 bg-base-200 card-lg shadow-sm indicator m-8 rounded-3xl">
+<div class="card w-66 bg-base-200 card-lg shadow-sm indicator m-7 rounded-3xl">
     <img class="indicator-item indicator-start size-9 pixels" src="/projects/icons/{data.group.toLowerCase()}.png" alt="group" />
     <figure>
         <img

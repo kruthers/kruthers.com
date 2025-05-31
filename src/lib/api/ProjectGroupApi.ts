@@ -9,7 +9,7 @@ export default class ProjectGroupApi extends BasicApi {
     constructor(group: string) {
         super()
         this.group = group
-        this.path = "projects/${this.group}"
+        this.path = `projects/${this.group}`
     }
 
     override async get(path: string): Promise<Response> {

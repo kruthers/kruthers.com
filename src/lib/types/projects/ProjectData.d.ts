@@ -1,21 +1,22 @@
-import {MinecraftType} from "./MinecraftData";
+import {MinecraftPlatform, MinecraftType} from "./MinecraftData";
 
 /** A very basic project */
-interface RawProject {
+export interface RawProject {
     group: string
     id: string
     name: string
     overview: string
 }
 
-interface ProjectBase extends RawProject {
+export interface ProjectBase extends RawProject {
     description: string
     changelog: [string, string]
 }
 
 /** A minecraft project */
-interface MinecraftProject extends ProjectBase {
-    tags: string[],
-    gameVersion: string[],
-    platforms: MinecraftType[]
+export interface MinecraftProject extends ProjectBase {
+    tags: string[]
+    gameVersion: string[]
+    platforms: MinecraftPlatform[]
+    type: MinecraftType
 }

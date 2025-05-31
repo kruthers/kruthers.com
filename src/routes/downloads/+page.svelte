@@ -7,7 +7,7 @@
 
 <PageInfo title="Downloads" description="Downloads for my projects" />
 <div class="min-h-screen max-w-7xl mx-auto shadow-lg">
-    <div class="grid grid-cols-3 gap-0.5" >
+    <div class="grid grid-cols-4" >
         {#each data.projects as project}
             <RawProjectCard data={project} />
         {/each}
