@@ -1,10 +1,18 @@
 import type {ProjectBase, RawProject} from "$lib/types/projects/ProjectData";
-import BasicApi from "$lib/api/BasicApi";
+import {SiteApi} from "$lib/api/SiteApi";
+import ProjectGroupApi from "$lib/api/ProjectGroupApi";
 
-export default class ProjectsApi extends BasicApi {
+export default class ProjectsApi {
+    private readonly api: SiteApi
+    public readonly minecraft: ProjectGroupApi
 
-    async getProjects() {
-        const result = await this.get("projects")
+    constructor(api: SiteApi) {
+        this.api = api
+        this.minecraft = new ProjectGroupApi("minecraft", this.api)
+    }
+
+    async getProjects(): Promise<RawProject[]> {
+        const result = await this.api.get("projects")
         if (result.ok) {
             return await result.json() as RawProject[]
         } else {
@@ -14,7 +22,7 @@ export default class ProjectsApi extends BasicApi {
     }
 
     async getProject(project : string) {
-        const result = await this.get(`project/${project}`)
+        const result = await this.api.get(`project/${project}`)
         if (result.ok) {
             return await result.json() as ProjectBase
         } else {
@@ -24,7 +32,7 @@ export default class ProjectsApi extends BasicApi {
     }
 
     async getDownloadLink(project: string, file: string) {
-        const result = await this.get(`project/${project}/download/${file}`)
+        const result = await this.api.get(`project/${project}/download/${file}`)
         const data = await result.text()
         if (result.ok) {
             return data
@@ -34,7 +42,7 @@ export default class ProjectsApi extends BasicApi {
     }
 
     async deleteProject(project: string): Promise<boolean> {
-        const result = await this.delete(`project/${project}`)
+        const result = await this.api.delete(`project/${project}`)
         if (result?.ok) {
             return true
         } else if (result != undefined) {
@@ -44,7 +52,7 @@ export default class ProjectsApi extends BasicApi {
     }
 
     async deleteFie(file: string): Promise<boolean> {
-        const result = await this.delete(`project/file/${file}`)
+        const result = await this.api.delete(`project/file/${file}`)
         if (result?.ok) {
             return true
         } else if (result != undefined) {

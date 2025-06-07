@@ -1,23 +1,23 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import BasicApi from "$lib/api/BasicApi";
 import type {ProjectBase} from "$lib/types/projects/ProjectData";
+import {SiteApi} from "$lib/api/SiteApi";
 
-export default class ProjectGroupApi extends BasicApi {
+export default class ProjectGroupApi {
+    private readonly api: SiteApi
     private readonly group: string
     private readonly path: string
 
-    constructor(group: string) {
-        super()
+    constructor(group: string, api: SiteApi) {
+        this.api = api
         this.group = group
         this.path = `projects/${this.group}`
     }
 
-    override async get(path: string): Promise<Response> {
-        return super.get(`${this.path}/${path}`);
+    async get(path: string): Promise<Response> {
+        return this.api.get(`${this.path}/${path}`);
     }
 
-    override async post(path: string, body: never) {
-        return super.post(`${this.path}/${path}`, body)
+    async post(path: string, body: never) {
+        return this.api.post(`${this.path}/${path}`, body)
     }
 
     async getProjects() {

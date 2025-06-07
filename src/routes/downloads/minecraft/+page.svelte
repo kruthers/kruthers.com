@@ -7,10 +7,12 @@
     import MinecraftProjectCard from "$lib/components/projects/minecraft/MinecraftProjectCard.svelte";
 
     import {page} from "$app/state";
-    import {checkMCProject} from "$lib/api/ProjectUtils";
+    import {api} from "$lib/systems/api";
+    import LoadingProjectCard from "$lib/components/projects/LoadingProjectCard.svelte";
+    import {checkMCProject} from "$lib/systems/ProjectUtils";
     let mcType: string = $state(page.url.searchParams.get("type") ?? "map")
 
-    let { data } = $props();
+    let data = api.projects.minecraft.getProjects()
 </script>
 
 <PageInfo title="Minecraft Downloads" description="Minecraft project downloads" />
@@ -22,10 +24,17 @@
         <MinecraftTab data="datapack"><FontAwesomeIcon icon={faBoxArchive} /> Datapacks</MinecraftTab>
     </div>
     <div class="grid grid-cols-4" >
-        {#each data.projects as project}
-            {#if (checkMCProject(project, mcType))}
-                <MinecraftProjectCard data={project} />
-            {/if}
-        {/each}
+        {#await (data)}
+            <LoadingProjectCard />
+            <LoadingProjectCard />
+            <LoadingProjectCard />
+            <LoadingProjectCard />
+        {:then value}
+            {#each value as project}
+                {#if (checkMCProject(project, mcType))}
+                    <MinecraftProjectCard data={project} />
+                {/if}
+            {/each}
+        {/await}
     </div>
 </div>
