@@ -4,7 +4,9 @@ export interface BaseFile {
     project: string,
     name: string,
     version: string,
-    id: string
+    link: string,
+    id: string,
+    published: string,
 }
 
 export interface MinecraftFile extends BaseFile {

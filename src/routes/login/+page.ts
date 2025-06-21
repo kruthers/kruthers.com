@@ -1,7 +1,7 @@
 import {api} from "$lib/systems/api";
-import type { PageServerLoad } from './$types';
+import type { PageLoad } from './$types';
 
-export const load: PageServerLoad = async () => {
+export const load: PageLoad = async () => {
     const link = api.auth.getLink()
 
     return {

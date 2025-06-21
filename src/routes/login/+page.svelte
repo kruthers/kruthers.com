@@ -1,10 +1,10 @@
 <script lang="ts">
 import PageInfo from "$lib/components/PageInfo.svelte";
-import type {PageServerData} from './$types';
+import type {PageData} from './$types';
 import {FontAwesomeIcon} from "@fortawesome/svelte-fontawesome";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons"
 
-let { data }: { data: PageServerData } = $props()
+let { data }: { data: PageData } = $props()
 
 </script>
 

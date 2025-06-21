@@ -6,17 +6,20 @@ export interface RawProject {
     id: string
     name: string
     overview: string
+    image: string
+    credit: string | undefined | null
+    tags: string[]
 }
 
 export interface ProjectBase extends RawProject {
     description: string
-    changelog: [string, string]
+    changelog: Map<string, string>
+    links: Map<string, string>
 }
 
 /** A minecraft project */
 export interface MinecraftProject extends ProjectBase {
-    tags: string[]
+    type: MinecraftType
     gameVersion: string[]
     platforms: MinecraftPlatform[]
-    type: MinecraftType
 }

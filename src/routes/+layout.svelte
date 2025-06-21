@@ -10,7 +10,8 @@
     //font awesome
     import { config } from '@fortawesome/fontawesome-svg-core'
 
-    import '@fortawesome/fontawesome-svg-core/styles.css' // Import the CSS
+    import '@fortawesome/fontawesome-svg-core/styles.css'
+    import AlertToastContainer from "$lib/components/alerts/AlertToastContainer.svelte"; // Import the CSS
     config.autoAddCss = false
 </script>
 
@@ -57,7 +58,6 @@
 
 {@render children()}
 
-
 <footer class="footer sm:footer-horizontal bg-neutral text-base-content p-10">
     <aside></aside>
     <nav>
@@ -99,3 +99,4 @@
         </div>
     </nav>
 </footer>
+<!--<AlertToastContainer />-->

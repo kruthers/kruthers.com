@@ -1,6 +1,7 @@
 import type {ProjectBase, RawProject} from "$lib/types/projects/ProjectData";
 import {SiteApi} from "$lib/api/SiteApi";
 import ProjectGroupApi from "$lib/api/ProjectGroupApi";
+import type {BaseFile} from "$lib/types/projects/FileData";
 
 export default class ProjectsApi {
     private readonly api: SiteApi
@@ -31,14 +32,43 @@ export default class ProjectsApi {
         }
     }
 
-    async getDownloadLink(project: string, file: string) {
-        const result = await this.api.get(`project/${project}/download/${file}`)
-        const data = await result.text()
-        if (result.ok) {
-            return data
+    async getFiles(project: string) {
+        const data = await this.getFilesRaw(project)
+        if (data == null) {
+            return []
         } else {
-            console.log(`Failed to get download url: ${result.status}: ${data}`)
+            return data as BaseFile[]
         }
+    }
+
+    async getFilesRaw(project: string) {
+        const result = await this.api.get(`project/${project}/files`)
+        if (result.ok) {
+            return await result.json() as unknown[]
+        } else {
+            if (result.status != 404) console.log(`Failed to find project files: ${result.status}: ${await result.text()}`)
+            return []
+        }
+    }
+
+    async download(project: string, file: string) {
+        const result = await this.api.get(`project/${project}/download/${file}`)
+        if (!result.ok) {
+            console.log(`Failed Download file: ${result.status}: ${await result.text()}`)
+        }
+    }
+
+    async updateFileLink(project: string, file: string, link: string) {
+        const result = await this.api.put(`project/${project}/file/${file}`, link, "text/plain")
+        if (result?.ok == true) {
+            return true
+        }
+        if (result == undefined) {
+            console.log("Unauthorized to update file link")
+        } else {
+            console.log(`Failed to update file: ${result.status}: ${await result.text()}`)
+        }
+        return false
     }
 
     async deleteProject(project: string): Promise<boolean> {

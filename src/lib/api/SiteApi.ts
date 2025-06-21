@@ -34,7 +34,7 @@ export class SiteApi {
         })
     }
 
-    async post(path: string, body: never): Promise<Response | undefined> {
+    async post(path: string, body: unknown): Promise<Response | undefined> {
         if (this.authorization == "") return
 
         return await fetch(`${this.options.url}/${path}`, {
@@ -47,7 +47,7 @@ export class SiteApi {
         })
     }
 
-    async put(path: string, body: never, contentType: string): Promise<Response | undefined> {
+    async put(path: string, body: unknown, contentType: string): Promise<Response | undefined> {
         if (this.authorization == "") return
 
         return await fetch(`${this.options.url}/${path}`, {

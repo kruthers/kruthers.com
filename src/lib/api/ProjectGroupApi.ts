@@ -51,14 +51,4 @@ export default class ProjectGroupApi {
         // }
     }
 
-    async getVersions(project : string) {
-        const result = await this.get(`${project}/files`)
-        if (result.ok) {
-            return await result.json() as ProjectBase
-        } else {
-            if (result.status != 404) console.log(`Failed to find project: ${result.status}: ${await result.text()}`)
-            return
-        }
-    }
-
 }
