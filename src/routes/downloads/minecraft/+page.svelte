@@ -1,14 +1,11 @@
 <script lang="ts">
-    import {FontAwesomeIcon} from "@fortawesome/svelte-fontawesome";
-    import { faMap, faPlug, faBoxOpen, faBoxArchive } from "@fortawesome/free-solid-svg-icons"
-
     import MinecraftTab from "$lib/components/projects/minecraft/MinecraftTab.svelte";
     import PageInfo from "$lib/components/PageInfo.svelte";
     import MinecraftProjectCard from "$lib/components/projects/minecraft/MinecraftProjectCard.svelte";
+    import LoadingProjectCard from "$lib/components/projects/LoadingProjectCard.svelte";
 
     import {page} from "$app/state";
     import {api} from "$lib/systems/api";
-    import LoadingProjectCard from "$lib/components/projects/LoadingProjectCard.svelte";
     import {checkMCProject} from "$lib/systems/ProjectUtils";
     let mcType: string = $state(page.url.searchParams.get("type") ?? "map")
 
@@ -18,10 +15,10 @@
 <PageInfo title="Minecraft Downloads" description="Minecraft project downloads" />
 <div class="min-h-screen max-w-7xl mx-auto">
     <div role="tablist" class="tabs tabs-box ">
-        <MinecraftTab data="map"><FontAwesomeIcon icon={faMap} /> Maps</MinecraftTab>
-        <MinecraftTab data="plugin"><FontAwesomeIcon icon={faPlug} /> Plugins</MinecraftTab>
-        <MinecraftTab data="mod"><FontAwesomeIcon icon={faBoxOpen} /> Mods</MinecraftTab>
-        <MinecraftTab data="datapack"><FontAwesomeIcon icon={faBoxArchive} /> Datapacks</MinecraftTab>
+        <MinecraftTab data="map">Maps</MinecraftTab>
+        <MinecraftTab data="plugin">Plugins</MinecraftTab>
+        <MinecraftTab data="mod">Mods</MinecraftTab>
+        <MinecraftTab data="datapack">Datapacks</MinecraftTab>
     </div>
     <div class="grid grid-cols-4" >
         {#await (data)}

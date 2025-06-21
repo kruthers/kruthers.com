@@ -1,19 +1,16 @@
 <script lang="ts">
-    import { onDestroy } from 'svelte';
-    import toasts from '$lib/systems/Toasts';
+    import toasts from '$lib/store/Toasts';
     import Info from "$lib/components/alerts/Info.svelte";
     import Success from "$lib/components/alerts/Success.svelte";
     import Warning from "$lib/components/alerts/Warning.svelte";
     import Error from "$lib/components/alerts/Error.svelte";
     import Verbose from "$lib/components/alerts/Verbose.svelte";
 
-    // let $toasts;
-    const unsubscribe = toasts.subscribe((value) => ($toasts = value));
-    onDestroy(unsubscribe);
+    $: $toasts = $toasts;
 </script>
 
-<div class="fixed top-4 right-4 z-50 space-y-2">
-    {#each $toasts as toast}
+<div class="toast">
+    {#each $toasts as toast (toast.id)}
         {#if (toast.type === "info")}
             <Info>{toast.message}</Info>
         {:else if (toast.type === "success")}

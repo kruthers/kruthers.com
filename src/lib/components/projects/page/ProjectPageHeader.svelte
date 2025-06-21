@@ -1,7 +1,6 @@
 <script lang="ts">
     import type {ProjectBase} from "$lib/types/projects/ProjectData";
-    import {FontAwesomeIcon} from "@fortawesome/svelte-fontawesome";
-    import {faDownload, faPen, faTags} from "@fortawesome/free-solid-svg-icons"
+    import Icon from "@iconify/svelte";
 
     export var data: ProjectBase
 </script>
@@ -47,7 +46,7 @@
                     <li>By {data.credit}</li>
                 {/if}
                 {#if (data)}
-                    <FontAwesomeIcon icon={faTags} />
+                    <Icon icon="mdi:tag-multiple-outline" width="1.2em" height="1.2em" />
                     {#each data.tags as tag}
                         <div class="badge badge-soft badge-info">{tag}</div>
                     {/each}
@@ -57,8 +56,8 @@
 
         <!-- Right: Buttons -->
         <div class="flex gap-2 self-start lg:self-center">
-            <button class="btn btn-primary"><FontAwesomeIcon icon={faPen} /> Edit</button>
-            <button class="btn btn-outline"><FontAwesomeIcon icon={faDownload} /> Download</button>
+            <button class="btn btn-primary"><Icon icon="mdi:pen" width="1.2em" height="1.2em" /> Edit</button>
+            <button class="btn btn-outline"><Icon icon="material-symbols:download-rounded" width="1.2em" height="1.2em" /> Download</button>
         </div>
 
     </div>

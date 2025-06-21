@@ -1,8 +1,7 @@
 <script lang="ts">
 import PageInfo from "$lib/components/PageInfo.svelte";
 import type {PageData} from './$types';
-import {FontAwesomeIcon} from "@fortawesome/svelte-fontawesome";
-import { faDiscord } from "@fortawesome/free-brands-svg-icons"
+import Icon from "@iconify/svelte";
 
 let { data }: { data: PageData } = $props()
 
@@ -15,14 +14,23 @@ let { data }: { data: PageData } = $props()
             {#await (data.discordRedirect)}
                 <span class="loading loading-spinner loading-xl"></span>
             {:then discordUrl}
-                <h1 class="text-5xl font-bold">Sign In</h1>
-                <p class="py-6">
-                    Login using discord, if you are not registered as an admin this will do nothing!
-                </p>
-                <a role="button" class="btn btn-wide tn-soft btn-info btn-outline" href={discordUrl}>
-                    <FontAwesomeIcon icon={faDiscord} style="color: #5865F2;" />
-                    Sign in with Discord
-                </a>
+                <div class="card w-96 bg-neutral text-neutral-content card-lg shadow-sm">
+                    <div class="card-body items-center text-center">
+                        <h1 class="card-title text-4xl">Sign In</h1>
+                        <p>
+                            <br/>
+                            This website uses a Discord whitelist to manage access to admin tools.
+                            If you are not pre-whitelisted you will not be able to sign in or do anything.
+                            <br /><br />
+                            If you believe you should have access then you are in the wrong place
+                            <br/>
+                        </p>
+                        <a role="button" class="btn bg-white text-black border-[#e5e5e5]" href={discordUrl}>
+                            <Icon icon="logos:discord-icon" width="1.55em" height="1.2em" />
+                            Sign in with Discord
+                        </a>
+                    </div>
+                </div>
             {/await}
         </div>
     </div>

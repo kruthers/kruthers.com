@@ -2,8 +2,8 @@
     import {onMount} from "svelte";
     import type { PageProps } from './$types';
     import {api, userToken} from "$lib/systems/api";
-    import { faTriangleExclamation, faCheckDouble } from "@fortawesome/free-solid-svg-icons"
-    import {FontAwesomeIcon} from "@fortawesome/svelte-fontawesome";
+    import Icon from "@iconify/svelte";
+    import {sendToast} from "$lib/store/Toasts";
 
     let title = $state("Authenticating...")
     let loading = $state(true)
@@ -12,10 +12,23 @@
     let { data }: PageProps = $props()
 
     onMount(async () => {
+        if (!data.code) {
+            sendToast({
+                id: 0,
+                message: "Failed to authenticate: Failed to read code from discord",
+                type: "error"
+            })
+            return
+        }
         await api.auth.authorize(data.code)
             .then((authData) => {
                 if (authData != null) {
                     userToken.set(authData)
+                    sendToast({
+                        id: 0,
+                        message: "Successfully signed into discord",
+                        type: "success"
+                    })
                     window.location.href = "/"
                     loading = false
                 } else {
@@ -23,6 +36,11 @@
                     loading = false
                     failed = true
                     title = "Authentication Failed."
+                    sendToast({
+                        id: 0,
+                        message: "Failed to authenticate: Unauthorized",
+                        type: "error"
+                    })
                 }
             })
     })
@@ -38,9 +56,9 @@
             {:else}
                 <p>
                     {#if (failed)}
-                        <FontAwesomeIcon icon={faTriangleExclamation} style="color: #E50006FF; height: auto; width: calc(var(--size-selector, 0.25rem) * 20);" />
+                        <Icon icon="pajamas:warning-solid" width="2em" height="2em"  style="color: #b01d1d" />
                     {:else}
-                        <FontAwesomeIcon icon={faCheckDouble} style="color: #00C850FF; height: auto; width: calc(var(--size-selector, 0.25rem) * 20);" />
+                        <Icon icon="bi:check-all" width="2em" height="2em"  style="color: #26b01d" />
                     {/if}
                 </p>
 

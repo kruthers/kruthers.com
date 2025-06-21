@@ -1,18 +1,11 @@
 <script lang="ts">
     import VersionIcon from "$lib/components/projects/page/subpart/VersionIcon.svelte";
     import type {BaseFile, MinecraftFile} from "$lib/types/projects/FileData";
-    import { faDownload } from "@fortawesome/free-solid-svg-icons"
     import FileLinkCopy from "$lib/components/projects/page/subpart/FileLinkCopy.svelte";
+    import Icon from "@iconify/svelte";
 
     export var files: BaseFile[]
     const mcFiles = files.map(value => value as MinecraftFile)
-
-    function copyLink(project: string, file: string) {
-        navigator.clipboard.writeText(`https://www.kruthers.com/downloads/${project}/files/${file}`)
-
-        //todo alert
-        alert()
-    }
 </script>
 
 <table class="table">
@@ -55,9 +48,9 @@
                 <div class="dropdown">
                     <div tabindex="0" role="button" class="btn m-1">Click</div>
                     <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                        <li><a href={file.link}>Download</a></li>
-                        <li><a href={file.id}>View Version</a></li>
-<!--                        <li><FileLinkCopy file={file} /></li>-->
+                        <li><a href={file.link}><Icon icon="material-symbols:download-rounded" width="1.2em" height="1.2em" /> Download</a></li>
+                        <li><a href={file.id}><Icon icon="mdi:credit-card-settings-outline" width="1.2em" height="1.2em" /> View Version</a></li>
+                        <li><FileLinkCopy file={file} /></li>
                     </ul>
                 </div>
             </th>

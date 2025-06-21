@@ -1,6 +1,6 @@
 <script lang="ts">
-    import {FontAwesomeIcon} from "@fortawesome/svelte-fontawesome";
-    import { faMap, faPlug, faBoxOpen, faBoxArchive } from "@fortawesome/free-solid-svg-icons"
+
+import Icon from "@iconify/svelte";
 </script>
 
 <ul class="p-2 z-40 bg-primary">
@@ -8,10 +8,10 @@
     <li>
         Minecraft
         <ul>
-            <li><a href="/downloads/minecraft?type=map"><FontAwesomeIcon icon={faMap} /> Maps</a></li>
-            <li><a href="/downloads/minecraft?type=mod"><FontAwesomeIcon icon={faBoxOpen} /> Mods</a></li>
-            <li><a href="/downloads/minecraft?type=plugin"><FontAwesomeIcon icon={faPlug} /> Plugins</a></li>
-            <li><a href="/downloads/minecraft?type=datapack"><FontAwesomeIcon icon={faBoxArchive} /> Datapacks</a></li>
+            <li><a href="/downloads/minecraft?type=map"><Icon icon="mdi:map" width="1.2em" height="1.2em" /> Maps</a></li>
+            <li><a href="/downloads/minecraft?type=mod"><Icon icon="mdi:gear-box" width="1.2em" height="1.2em" /> Mods</a></li>
+            <li><a href="/downloads/minecraft?type=plugin"><Icon icon="material-symbols:power-plug-rounded" width="1.2em" height="1.2em" /> Plugins</a></li>
+            <li><a href="/downloads/minecraft?type=datapack"><Icon icon="mdi:box-variant" width="1.2em" height="1.2em" /> Datapacks</a></li>
         </ul>
     </li>
 </ul>
