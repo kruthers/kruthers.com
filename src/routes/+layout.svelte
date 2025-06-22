@@ -9,7 +9,7 @@
 
     import AlertToastContainer from "$lib/components/alerts/AlertToastContainer.svelte";
     import Icon from "@iconify/svelte";
-    import {copyWithAlert} from "$lib/systems/CopyUtils"; // Import the CSS
+    import {copyWithAlert} from "$lib/utils/CopyUtils"; // Import the CSS
 </script>
 
 <svelte:window bind:innerWidth />

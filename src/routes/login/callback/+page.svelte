@@ -1,7 +1,7 @@
 <script lang="ts">
     import {onMount} from "svelte";
     import type { PageProps } from './$types';
-    import {api, userToken} from "$lib/systems/api";
+    import {api, userToken} from "$lib/utils/api";
     import Icon from "@iconify/svelte";
     import {sendToast} from "$lib/store/Toasts";
 

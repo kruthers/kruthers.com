@@ -1,5 +1,6 @@
 import type {MinecraftProject} from "$lib/types/projects/ProjectData";
-import {isModded, isPluginLoader, MinecraftType} from "$lib/types/projects/MinecraftData";
+import {MinecraftType} from "$lib/types/projects/MinecraftData";
+import { isModded, isPluginLoader } from "$lib/utils/MinecraftUtils";
 
 export function checkMCProject(project: MinecraftProject, type: string): boolean {
     if (type === "map") {
@@ -15,3 +16,14 @@ export function checkMCProject(project: MinecraftProject, type: string): boolean
     }
     return false
 }
+
+export function formatFileDate(dateString: string): string {
+    const date = new Date(dateString)
+    const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    };
+    return date.toLocaleDateString(undefined, options);
+}
+

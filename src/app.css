@@ -59,3 +59,15 @@ img.pixels {
   -ms-interpolation-mode: nearest-neighbor;
   image-rendering: pixelated;
 }
+
+.meta-list li + li::before {
+  content: "|";
+  padding-right: calc(var(--spacing) * 3) /* 0.75rem = 12px */;
+  padding-left: calc(var(--spacing) * 3) /* 0.75rem = 12px */;
+}
+
+.no-meta-list li + li::before {
+  content: "";
+  padding-right: 0;
+  padding-left: 0;
+}

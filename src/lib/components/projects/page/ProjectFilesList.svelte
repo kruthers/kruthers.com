@@ -1,6 +1,6 @@
 <script lang="ts">
-    import VersionIcon from "$lib/components/projects/page/subpart/VersionIcon.svelte";
     import type {BaseFile} from "$lib/types/projects/FileData";
+    import FileRow from "$lib/components/projects/page/subpart/FileRow.svelte";
 
     export var files: BaseFile[]
 </script>
@@ -18,21 +18,9 @@
     <tbody>
     {#each files as file}
         {#if (file.link != null)}
-            <tr>
-                <td><VersionIcon version={file.version} /></td>
-                <td>
-                    <div class="flex items-center gap-3">
-                        <div>
-                            <div class="font-bold">{file.name}</div>
-                            <div class="text-sm opacity-50">{file.version}</div>
-                        </div>
-                    </div>
-                </td>
-                <td>{file.published}</td>
-                <td>
-                    TODO
-                </td>
-            </tr>
+            <FileRow file={file}>
+                <!--Nothing in this one-->
+            </FileRow>
         {/if}
     {/each}
     </tbody>

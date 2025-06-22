@@ -19,8 +19,6 @@
             error(404, `Project with ${data.id} not found`)
         }
 
-        console.log(proj)
-
         loading = false
         project = proj
     })

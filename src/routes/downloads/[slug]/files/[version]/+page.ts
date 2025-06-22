@@ -1,7 +1,21 @@
 import type { PageLoad } from './$types';
-import {api} from "$lib/systems/api";
 
-export const load: PageLoad = ({ params }) => {
-    const version = params.slug
+export const load: PageLoad = async ({ parent, params }) => {
+    const parentData = await parent()
+    const fileId = params.version
 
+    const file = parentData.files.then( result => {
+        const checked = result.filter((file) => file.id === fileId)
+        if (checked.length > 0) {
+            return checked[0]
+        } else {
+            return undefined
+        }
+    })
+
+    return {
+        ...parentData,
+        fileID: fileId,
+        file: file
+    }
 };

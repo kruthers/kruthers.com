@@ -4,7 +4,7 @@
     import {onMount} from "svelte";
     import {error} from "@sveltejs/kit";
     import Markdown from "$lib/components/Markdown.svelte";
-    import {isPreRelease} from "$lib/systems/Versioning";
+    import {isPreRelease} from "$lib/utils/Versioning";
     const { data } : PageProps  = $props();
 
     let project: ProjectBase | undefined = $state()

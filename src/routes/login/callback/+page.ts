@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
-import {api} from "$lib/systems/api";
+import {api} from "$lib/utils/api";
 
 export const load: PageLoad = async ({ url }) => {
     const searchParams = url.searchParams

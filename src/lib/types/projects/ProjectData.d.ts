@@ -1,4 +1,4 @@
-import {MinecraftPlatform, MinecraftType} from "./MinecraftData";
+import {type MinecraftPlatform, MinecraftType} from "./MinecraftData";
 
 /** A very basic project */
 export interface RawProject {

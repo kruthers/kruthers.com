@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {isPreRelease} from "$lib/systems/Versioning";
+    import {isPreRelease} from "$lib/utils/Versioning";
 
     export var version: string
 </script>

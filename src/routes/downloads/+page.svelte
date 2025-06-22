@@ -1,7 +1,7 @@
 <script lang="ts">
     import PageInfo from "$lib/components/PageInfo.svelte";
     import RawProjectCard from "$lib/components/projects/RawProjectCard.svelte";
-    import {api} from "$lib/systems/api";
+    import {api} from "$lib/utils/api";
     import LoadingProjectCard from "$lib/components/projects/LoadingProjectCard.svelte";
 
     const data = api.projects.getProjects()

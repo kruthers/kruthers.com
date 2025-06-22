@@ -1,18 +1,10 @@
 <script lang="ts">
     import type {ProjectBase} from "$lib/types/projects/ProjectData";
     import Icon from "@iconify/svelte";
+    import MetaDataList from "$lib/components/projects/page/subpart/MetaDataList.svelte";
 
     export var data: ProjectBase
 </script>
-
-<style>
-    /* Auto-insert vertical dividers between list items */
-    .meta-list li + li::before {
-        content: "|";
-        margin: 0 0.75rem;
-        color: #9ca3af; /* Optional: match Tailwind's neutral tone */
-    }
-</style>
 
 <!-- Banner -->
 <div class="space-y-4">
@@ -41,16 +33,21 @@
                 {data.overview}
             </p>
             <!-- Meta Info with Dividers -->
-            <ul class="meta-list flex flex-wrap items-center text-sm text-base-content/50">
+            <MetaDataList>
                 {#if (data.credit)}
                     <li>By {data.credit}</li>
                 {/if}
                 {#if (data)}
-                    <Icon icon="mdi:tag-multiple-outline" width="1.2em" height="1.2em" />
-                    {#each data.tags as tag}
-                        <div class="badge badge-soft badge-info">{tag}</div>
-                    {/each}
+                    <li class="flex items-center gap-1 px-2">
+                        <Icon icon="mdi:tag-multiple-outline" width="1.2em" height="1.2em" />
+                        {#each data.tags as tag}
+                            <div class="badge badge-soft badge-info">{tag}</div>
+                        {/each}
+                    </li>
                 {/if}
+            </MetaDataList>
+            <ul class="meta-list flex flex-wrap items-center text-sm max-w-xs text-base-content/50">
+
             </ul>
         </div>
 

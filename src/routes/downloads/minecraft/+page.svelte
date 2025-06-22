@@ -5,8 +5,8 @@
     import LoadingProjectCard from "$lib/components/projects/LoadingProjectCard.svelte";
 
     import {page} from "$app/state";
-    import {api} from "$lib/systems/api";
-    import {checkMCProject} from "$lib/systems/ProjectUtils";
+    import {api} from "$lib/utils/api";
+    import {checkMCProject} from "$lib/utils/ProjectUtils";
     let mcType: string = $state(page.url.searchParams.get("type") ?? "map")
 
     let data = api.projects.minecraft.getProjects()
