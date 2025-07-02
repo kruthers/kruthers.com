@@ -31,7 +31,7 @@
     {:else}
         <ProjectPageHeader data={project} />
         {#if (project.group === "MINECRAFT")}
-            <MinecraftProjectExtras>{@render children()}</MinecraftProjectExtras>
+            <MinecraftProjectExtras project={project}>{@render children()}</MinecraftProjectExtras>
         {:else}
             {@render children()}
         {/if}

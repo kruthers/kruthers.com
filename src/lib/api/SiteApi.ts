@@ -60,6 +60,19 @@ export class SiteApi {
         })
     }
 
+    async patch(path: string, body: unknown): Promise<Response | undefined> {
+        if (this.authorization == "") return
+
+        return await fetch(`${this.options.url}/${path}`, {
+            method: "PATCH",
+            headers: {
+                "Authorization": this.authorization,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        })
+    }
+
     async delete(path: string): Promise<Response | undefined> {
         if (this.authorization == "") return
 

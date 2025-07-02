@@ -5,11 +5,25 @@ import type {BaseFile} from "$lib/types/projects/FileData";
 
 export default class ProjectsApi {
     private readonly api: SiteApi
+    private readonly groups: ProjectGroupApi[] = []
+
     public readonly minecraft: ProjectGroupApi
 
     constructor(api: SiteApi) {
         this.api = api
         this.minecraft = new ProjectGroupApi("minecraft", this.api)
+
+        //array of all the groups
+        this.groups.push(this.minecraft)
+    }
+
+    getGroup(group: string): ProjectGroupApi | undefined {
+        const groups = this.groups.filter(g => g.group === group)
+        if (groups.length > 0) {
+            return groups[0]
+        } else {
+            return undefined
+        }
     }
 
     async getProjects(): Promise<RawProject[]> {

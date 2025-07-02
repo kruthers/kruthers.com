@@ -15,11 +15,13 @@ export interface ProjectBase extends RawProject {
     description: string
     changelog: Map<string, string>
     links: Map<string, string>
+    created: string
+    lastUpdate: string
 }
 
 /** A minecraft project */
 export interface MinecraftProject extends ProjectBase {
     type: MinecraftType
-    gameVersion: string[]
+    gameVersions: string[]
     platforms: MinecraftPlatform[]
 }

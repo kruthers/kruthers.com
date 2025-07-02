@@ -12,6 +12,7 @@
     import {sendToast} from "$lib/store/Toasts";
     import {getOrdinal} from "$lib/utils/Utils";
     import {copyWithAlert} from "$lib/utils/CopyUtils";
+    import FormattedDate from "$lib/components/FormattedDate.svelte";
     const { data } : PageProps  = $props();
 
     let file: BaseFile | undefined = $state()
@@ -38,20 +39,6 @@
             })
         }
     })
-
-    function formatDate(dateString: string): string {
-        const date = new Date(dateString)
-        const day = getOrdinal(date.getDate())
-        const month = date.toLocaleString(undefined, { month: 'long' })
-        const year = date.getFullYear()
-        const time = date.toLocaleTimeString(undefined, {
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true,
-        }).toLowerCase()
-
-        return `${month} ${day}, ${year} at ${time}`
-    }
 
     function copyID() {
         if (file) {
@@ -104,7 +91,8 @@
                 {/if}
                 <li>
                     <span class="flex items-center"><Icon icon="mdi:clock" width="1.2em" height="1.2em" /> <strong>Published:</strong></span>
-                    {formatDate(file.published)}</li>
+                    <FormattedDate date={file.published} />
+                </li>
                 <li>
                     <span class="flex items-center"><Icon icon="mdi:file" width="1.2em" height="1.2em" /> <strong>File ID:</strong></span>
                     <button onclick={() => copyID()} class="badge badge-sm rounded-full bg-base-100 cursor-pointer">

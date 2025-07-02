@@ -2,8 +2,45 @@
     import type {ProjectBase} from "$lib/types/projects/ProjectData";
     import Icon from "@iconify/svelte";
     import MetaDataList from "$lib/components/projects/page/subpart/MetaDataList.svelte";
+    import {toTitleCase} from "$lib/utils/Utils";
+    import {api, userToken} from "$lib/utils/api";
 
     export var data: ProjectBase
+    let openEdit = false
+
+    function getAvalibleTags(): string[] {
+        let tags: string[] = []
+        switch (data.group) {
+            case "MINECRAFT": {
+                tags.push("minigame","map","admin","tools")
+            }
+        }
+
+        return tags
+    }
+
+    function submitEdit(event: SubmitEvent) {
+        event.preventDefault()
+        const formData = new FormData(event.target as HTMLFormElement)
+
+        const edit = {
+            title: formData.get('title'),
+            overview: formData.get('overview'),
+            description: formData.get('description'),
+            tags: formData.getAll('tags')
+        }
+
+        openEdit = false
+
+        const proj = data
+        if (edit.title) proj.name = edit.title as string
+        if (edit.overview) proj.overview = edit.overview as string
+        if (edit.description) proj.description = edit.description as string
+        if (edit.tags) proj.tags = edit.tags as string[]
+
+        const group = api.projects.getGroup(proj.group.toLowerCase())
+        group?.editProject(proj)
+    }
 </script>
 
 <!-- Banner -->
@@ -13,7 +50,7 @@
     <div class="text-sm breadcrumbs">
         <ul>
             <li><a href="/downloads">Downloads</a></li>
-            <li><a href="/downloads/minecraft">Minecraft</a></li>
+            <li><a href="/downloads/{data.group.toLowerCase()}">{toTitleCase(data.group)}</a></li>
             <li>{data.id}</li>
         </ul>
     </div>
@@ -46,16 +83,57 @@
                     </li>
                 {/if}
             </MetaDataList>
-            <ul class="meta-list flex flex-wrap items-center text-sm max-w-xs text-base-content/50">
-
-            </ul>
         </div>
 
         <!-- Right: Buttons -->
         <div class="flex gap-2 self-start lg:self-center">
-            <button class="btn btn-primary"><Icon icon="mdi:pen" width="1.2em" height="1.2em" /> Edit</button>
+            {#if ($userToken)} <button class="btn btn-primary" on:click={() => openEdit = true}><Icon icon="mdi:pen" width="1.2em" height="1.2em" /> Edit</button> {/if}
             <button class="btn btn-outline"><Icon icon="material-symbols:download-rounded" width="1.2em" height="1.2em" /> Download</button>
         </div>
 
     </div>
 </div>
+
+{#if (openEdit)}
+    <dialog class="modal modal-open">
+        <div class="modal-box max-w-full m-2">
+            <form on:submit={submitEdit} class="space-y-4">
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend text-lg">Edit Project</legend>
+
+                    <label class="label" for="title">Email</label>
+                    <input id="title" name="title" type="text" class="input" value={data.name} />
+
+                    <label class="label" for="overview">Overview</label>
+                    <input id="overview" name="overview" type="text" class="input" value={data.overview} />
+
+                    <label class="label" for="description">Overview</label>
+                    <textarea id="description" name="description" class="textarea textarea-bordered h-28">{data.description}</textarea>
+
+                    <label class="label" for="tags">Project Tags</label>
+                    <div id="tags" class="dropdown w-full">
+                        <div tabindex="-1" class="btn w-full justify-between">
+                            <span>Select Tags</span>
+                            <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </div>
+                        <ul tabindex="-1" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-full max-h-48 overflow-auto">
+                            {#each getAvalibleTags() as tag}
+                                <li>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" class="checkbox checkbox-sm" name="tags" value={tag} checked="{data.tags.includes(tag)}" />
+                                        <span>{tag}</span>
+                                    </label>
+                                </li>
+                            {/each}
+                        </ul>
+                    </div>
+
+                    <div class="modal-action">
+                        <button type="button" class="btn btn-warning" on:click={() => openEdit = false}>Abandon</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </dialog>
+{/if}

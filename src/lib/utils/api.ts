@@ -8,9 +8,10 @@ export const api = new SiteApi({
     access_token: (browser ? localStorage.getItem("token") : '')
 })
 
-export const userToken: Writable<string | null> = writable(function(){
-    if (!browser) return null
-    return localStorage.getItem("token")
+export const userToken: Writable<string | undefined> = writable(function(){
+    if (!browser) return undefined
+    const t = localStorage.getItem("token")
+    return  t ? t : undefined
 }());
 
 userToken.subscribe((data) => {
