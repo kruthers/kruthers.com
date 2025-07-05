@@ -1,20 +1,22 @@
-import type {MinecraftProject} from "$lib/types/projects/ProjectData";
-import {MinecraftType} from "$lib/types/projects/MinecraftData";
+import type {MinecraftProject, ProjectBase} from "$lib/types/projects/ProjectData";
 import { isModded, isPluginLoader } from "$lib/utils/MinecraftUtils";
 
-export function checkMCProject(project: MinecraftProject, type: string): boolean {
-    if (type === "map") {
-        return project.type == MinecraftType.MAP
-    } else if (type == "datapack") {
-        return project.type == MinecraftType.DATAPACK
-    } else if (type == "mod") {
-        const checked = project.platforms.filter( value => isModded(value))
-        return checked.length > 0 && project.type == MinecraftType.JAR
-    } else if (type == "plugin") {
-        const checked = project.platforms.filter( value => isPluginLoader(value))
-        return checked.length > 0 && project.type == MinecraftType.JAR
+export function checkMCProject(input: ProjectBase, type: MinecraftGroup): boolean {
+    if (input.group != "MINECRAFT") return false
+    const project = input as MinecraftProject
+    switch (type) {
+        case "all": return true
+        case "map": return project.type == "MAP"
+        case "plugin": {
+            const checked = project.platforms.filter( value => isPluginLoader(value))
+            return checked.length > 0 && project.type == "JAR"
+        }
+        case "mod": {
+            const checked = project.platforms.filter( value => isModded(value))
+            return checked.length > 0 && project.type == "JAR"
+        }
+        case "datapack": return project.type == "DATAPACK"
     }
-    return false
 }
 
 export function formatFileDate(dateString: string): string {

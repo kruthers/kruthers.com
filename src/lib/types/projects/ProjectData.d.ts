@@ -1,5 +1,3 @@
-import {type MinecraftPlatform, MinecraftType} from "./MinecraftData";
-
 /** A very basic project */
 export interface RawProject {
     group: string

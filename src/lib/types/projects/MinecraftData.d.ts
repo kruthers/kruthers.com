@@ -1,13 +1,12 @@
-export type MinecraftPlatform =
+type MinecraftPlatform =
     "VANILLA" | "FABRIC" | "FORGE" | "NEO_FORGE" | "BUKKIT" | "SPIGOT" | "PAPER" | "FOLIA" | "SPONGE" | "VELOCITY"
 
-export enum MinecraftType {
-    MAP,
-    JAR,
-    DATAPACK
-}
+type MinecraftGroup = "all" | "map" | "plugin" | "mod" | "datapack"
 
-export type McPlatformData = {
+type MinecraftType =
+    "MAP" | "JAR" | "DATAPACK"
+
+type McPlatformData = {
     id: MinecraftPlatform,
     icon?: string
     name: string,

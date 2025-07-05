@@ -7,18 +7,23 @@
     import {page} from "$app/state";
     import {api} from "$lib/utils/api";
     import {checkMCProject} from "$lib/utils/ProjectUtils";
-    let mcType: string = $state(page.url.searchParams.get("type") ?? "map")
+    // eslint-disable-next-line no-undef
+    let mcType: MinecraftGroup = $state((page.url.searchParams.get("type") ?? "all") as MinecraftGroup)
 
     let data = api.projects.minecraft.getProjects()
+
+    function changeGroup(group: MinecraftGroup) {
+        mcType = group
+    }
 </script>
 
 <PageInfo title="Minecraft Downloads" description="Minecraft project downloads" />
 <div class="min-h-screen max-w-7xl mx-auto">
-    <div role="tablist" class="tabs tabs-box ">
-        <MinecraftTab data="map">Maps</MinecraftTab>
-        <MinecraftTab data="plugin">Plugins</MinecraftTab>
-        <MinecraftTab data="mod">Mods</MinecraftTab>
-        <MinecraftTab data="datapack">Datapacks</MinecraftTab>
+    <div role="tablist" class="tabs tabs-box">
+        <MinecraftTab group="map" change={changeGroup}>Maps</MinecraftTab>
+        <MinecraftTab group="plugin" change={changeGroup}>Plugins</MinecraftTab>
+        <MinecraftTab group="mod" change={changeGroup}>Mods</MinecraftTab>
+        <MinecraftTab group="datapack" change={changeGroup}>Datapacks</MinecraftTab>
     </div>
     <div class="grid grid-cols-4" >
         {#await (data)}

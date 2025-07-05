@@ -111,10 +111,10 @@
                     <input id="title" name="title" type="text" class="input" value={data.name} />
 
                     <label class="label" for="overview">Overview</label>
-                    <input id="overview" name="overview" type="text" class="input" value={data.overview} />
+                    <input id="overview" name="overview" type="text" class="input w-full" value={data.overview} />
 
                     <label class="label" for="description">Overview</label>
-                    <textarea id="description" name="description" class="textarea textarea-bordered h-28">{data.description}</textarea>
+                    <textarea id="description" name="description" class="textarea textarea-bordered h-28  w-full">{data.description}</textarea>
 
                     <label class="label" for="tags">Project Tags</label>
                     <TagSelector id="tags" name="Tags" options={getAvalibleTags()} initial={data.tags} />

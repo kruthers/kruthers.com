@@ -1,5 +1,3 @@
-import {type McPlatformData, type MinecraftPlatform} from "$lib/types/projects/MinecraftData";
-
 const unknownPlatform: McPlatformData = {
     id: "VANILLA",
     name: "Unknown",
