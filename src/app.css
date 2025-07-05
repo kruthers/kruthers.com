@@ -1,19 +1,18 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-
 @plugin "daisyui/theme" {
   name: "main";
   default: true;
   prefersdark: false;
   color-scheme: "dark";
-  --color-base-100: oklch(70% 0 0);
-  --color-base-200: oklch(55% 0 0);
-  --color-base-300: oklch(37% 0 0);
-  --color-base-content: oklch(84.87% 0 0);
+  --color-base-100: oklch(60% 0 0);
+  --color-base-200: oklch(50% 0 0);
+  --color-base-300: oklch(40% 0 0);
+  --color-base-content: oklch(90% 0 0);
   --color-primary: oklch(41.703% 0.099 251.473);
   --color-primary-content: oklch(88.34% 0.019 251.473);
-  --color-secondary: oklch(66% 0.179 58.318);
+  --color-secondary: oklch(0.551 0.026 242.208);
   --color-secondary-content: oklch(12.818% 0.005 229.389);
   --color-accent: oklch(44% 0.119 151.328);
   --color-accent-content: oklch(13.454% 0.033 35.791);
@@ -23,7 +22,7 @@
   --color-info-content: oklch(12.523% 0.028 240.033);
   --color-success: oklch(72% 0.219 149.579);
   --color-success-content: oklch(14.045% 0.018 156.596);
-  --color-warning: oklch(77.482% 0.115 81.519);
+  --color-warning: oklch(0.81 0.163 99.908);
   --color-warning-content: oklch(15.496% 0.023 81.519);
   --color-error: oklch(57% 0.245 27.325);
   --color-error-content: oklch(90.322% 0.029 29.674);
@@ -70,4 +69,57 @@ img.pixels {
   content: "";
   padding-right: 0;
   padding-left: 0;
+}
+
+.markdown {
+  @apply prose sm:prose max-w-none;
+}
+
+.markdown h1 {
+  @apply text-3xl font-bold mt-6 mb-4;
+}
+
+.markdown h2 {
+  @apply text-2xl font-semibold mt-5 mb-3;
+}
+
+.markdown h3 {
+  @apply text-xl font-semibold mt-5 mb-3;
+}
+
+.markdown p {
+  @apply mb-4;
+}
+
+.markdown ul {
+  @apply pl-5 list-disc mb-4;
+}
+.markdown ol {
+  @apply pl-5 list-decimal mb-4;
+}
+
+.markdown li {
+  @apply mb-2 leading-relaxed;
+}
+
+.markdown a {
+  @apply text-primary hover:underline;
+}
+
+.markdown pre {
+  @apply bg-base-200 p-4 rounded;
+}
+
+.markdown code {
+  @apply bg-base-200 text-sm px-1 rounded;
+}
+
+.markdown blockquote {
+  @apply border-l-4 border-base-300 pl-4 italic text-base-content/80;
+}
+
+.markdown th,
+.markdown td,
+.markdown table {
+  @apply border-1 border-base-300
 }

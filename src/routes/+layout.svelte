@@ -16,7 +16,7 @@
 <PageInfo title="Unknown" description="No Description set" />
 
 <header class="col-auto">
-    <div class="bg-primary shadow-sm">
+    <div class="bg-primary shadow-sm text-primary-content">
         <nav class="navbar mx-auto max-w-7xl px-2 lg:px-8">
             <div class="navbar-start">
                 <div class="dropdown">

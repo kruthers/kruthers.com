@@ -7,4 +7,7 @@
     const html = marked(content);
 </script>
 
-{@html html}
+
+<div class="markdown">
+    {@html html}
+</div>

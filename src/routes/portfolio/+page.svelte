@@ -30,7 +30,7 @@
             roles: [ "Developer", "Game Designer", "Project Leads" ],
             tags: [],
             image: "bolt.png",
-            link: undefined
+            link: "https://kruthers.com/downloads/bolt"
         }
     ]
 </script>
@@ -41,7 +41,7 @@
 <PageInfo title="Portfolio" description="A full developer, project manager and systems administrator working on technical projects and in Java & Kotlin with experience in making websites, servers, plugins and mods" />
 
 <div class="min-h-full">
-    <header class="bg-white shadow">
+    <header class="bg-secondary shadow">
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <h1 class="text-3xl font-bold tracking-tight text-gray-900">Portfolio</h1>
         </div>
@@ -83,7 +83,7 @@
             <Language name="Gradle (Kotlin)" link="https://gradle.org/" icon="gradle-plain colored"/>
         </div>
     </main>
-    <header class="bg-white shadow">
+    <header class="bg-secondary shadow">
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <h1 class="text-3xl font-bold tracking-tight text-gray-900">Previous Work</h1>
         </div>
