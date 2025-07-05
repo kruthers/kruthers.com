@@ -1,6 +1,8 @@
 import type {ProjectBase} from "$lib/types/projects/ProjectData";
 import {SiteApi} from "$lib/api/SiteApi";
 import {sendToast} from "$lib/store/Toasts";
+import type {BaseFile} from "$lib/types/projects/FileData";
+import {invalidateAll} from "$app/navigation";
 
 export default class ProjectGroupApi {
     private readonly api: SiteApi
@@ -19,6 +21,10 @@ export default class ProjectGroupApi {
 
     private async post(path: string, body: never) {
         return this.api.post(`${this.path}/${path}`, body)
+    }
+
+    private async put(path: string, body: string, contentType: string) {
+        return this.api.put(`${this.path}/${path}`, body, contentType)
     }
 
     private async patch(path: string, body: unknown) {
@@ -46,14 +52,25 @@ export default class ProjectGroupApi {
     }
 
     async updateChangelog(project : string, version: string, change: string) {
-        //todo!!
-        // const result = await this.get(`${project}`)
-        // if (result.ok) {
-        //     return await result.json() as ProjectBase
-        // } else {
-        //     if (result.status != 404) console.log(`Failed to find project: ${result.status}: ${await result.text()}`)
-        //     return
-        // }
+        const data = {
+            version: version,
+            log: change
+        }
+        const result = await this.put(`${project}/changelog`, JSON.stringify(data), "application/json")
+        if (result?.ok) {
+            sendToast({
+                message: `Update changelog for ${project} version ${version}`,
+                type: "success"
+            })
+            return await result.json() as ProjectBase
+        } else {
+            sendToast({
+                message: `Failed to update changelog for ${project} version ${version}`,
+                type: "error"
+            })
+            if (result?.status != 404) console.log(`Failed to update changelog: ${result?.status}: ${await result?.text()}`)
+            return
+        }
     }
 
     async editProject(project: ProjectBase) {
@@ -71,6 +88,30 @@ export default class ProjectGroupApi {
             }
             sendToast({
                 message: "Failed to update project",
+                type: "error"
+            })
+            return
+        }
+    }
+
+    async editFile(project: string, file: string, data: object) {
+        const result = await this.patch(`${project}/file/${file}`, {
+            version: "0.0.0",
+            ...data
+        })
+        if (result?.ok) {
+            sendToast({
+                message: "File Updated",
+                duration: 10,
+                type: "success"
+            })
+            return await result.json() as BaseFile
+        } else {
+            if (result?.status != 404 && result) {
+                console.log(`Failed to update file: ${result.status}: ${await result.text()}`)
+            }
+            sendToast({
+                message: "Failed to update file",
                 type: "error"
             })
             return

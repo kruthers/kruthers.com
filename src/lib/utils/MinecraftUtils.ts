@@ -7,7 +7,7 @@ const unknownPlatform: McPlatformData = {
     type: "vanilla"
 }
 
-const platforms: McPlatformData[] = [
+export const platforms: McPlatformData[] = [
     {id: "VANILLA", name: "Vanilla", icon: "mdi:minecraft", color: "#8eb920", type: "vanilla"},
     {id: "FABRIC", name: "Fabric", icon: "file-icons:fabric", color: "#dbd0b4", type: "mod"},
     {id: "FORGE", name: "Forge", icon: "cib:conda-forge", color: "#dfa86a", type: "mod"},
@@ -30,7 +30,6 @@ export function isPluginLoader(plat: MinecraftPlatform) {
 
 export function getPlatformData(plat: MinecraftPlatform): McPlatformData {
     const options = platforms.filter((p) => p.id === plat)
-    console.log(options)
     return options.length > 0 ? options[0] : unknownPlatform
 }
 

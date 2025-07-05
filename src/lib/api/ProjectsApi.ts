@@ -2,6 +2,7 @@ import type {ProjectBase, RawProject} from "$lib/types/projects/ProjectData";
 import {SiteApi} from "$lib/api/SiteApi";
 import ProjectGroupApi from "$lib/api/ProjectGroupApi";
 import type {BaseFile} from "$lib/types/projects/FileData";
+import {sendToast} from "$lib/store/Toasts";
 
 export default class ProjectsApi {
     private readonly api: SiteApi
@@ -98,9 +99,17 @@ export default class ProjectsApi {
     async deleteFie(file: string): Promise<boolean> {
         const result = await this.api.delete(`project/file/${file}`)
         if (result?.ok) {
+            sendToast({
+                message: "File deleted",
+                type: "info"
+            })
             return true
         } else if (result != undefined) {
             console.log(`Failed to get delete file: ${result.status}: ${await result.text()}`)
+            sendToast({
+                message: "Failed to delete file",
+                type: "error"
+            })
         }
         return false
     }

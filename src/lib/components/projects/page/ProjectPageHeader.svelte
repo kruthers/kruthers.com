@@ -4,6 +4,8 @@
     import MetaDataList from "$lib/components/projects/page/subpart/MetaDataList.svelte";
     import {toTitleCase} from "$lib/utils/Utils";
     import {api, userToken} from "$lib/utils/api";
+    import TagSelector from "$lib/components/TagSelector.svelte";
+    import {sendToast} from "$lib/store/Toasts";
 
     export var data: ProjectBase
     let openEdit = false
@@ -31,6 +33,10 @@
         }
 
         openEdit = false
+
+        sendToast({
+            message: "Updating project..."
+        })
 
         const proj = data
         if (edit.title) proj.name = edit.title as string
@@ -101,7 +107,7 @@
                 <fieldset class="fieldset">
                     <legend class="fieldset-legend text-lg">Edit Project</legend>
 
-                    <label class="label" for="title">Email</label>
+                    <label class="label" for="title">Project Name</label>
                     <input id="title" name="title" type="text" class="input" value={data.name} />
 
                     <label class="label" for="overview">Overview</label>
@@ -111,22 +117,7 @@
                     <textarea id="description" name="description" class="textarea textarea-bordered h-28">{data.description}</textarea>
 
                     <label class="label" for="tags">Project Tags</label>
-                    <div id="tags" class="dropdown w-full">
-                        <div tabindex="-1" class="btn w-full justify-between">
-                            <span>Select Tags</span>
-                            <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                        </div>
-                        <ul tabindex="-1" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-full max-h-48 overflow-auto">
-                            {#each getAvalibleTags() as tag}
-                                <li>
-                                    <label class="flex items-center gap-2 cursor-pointer">
-                                        <input type="checkbox" class="checkbox checkbox-sm" name="tags" value={tag} checked="{data.tags.includes(tag)}" />
-                                        <span>{tag}</span>
-                                    </label>
-                                </li>
-                            {/each}
-                        </ul>
-                    </div>
+                    <TagSelector id="tags" name="Tags" options={getAvalibleTags()} initial={data.tags} />
 
                     <div class="modal-action">
                         <button type="button" class="btn btn-warning" on:click={() => openEdit = false}>Abandon</button>

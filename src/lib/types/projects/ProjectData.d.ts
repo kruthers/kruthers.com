@@ -13,8 +13,8 @@ export interface RawProject {
 
 export interface ProjectBase extends RawProject {
     description: string
-    changelog: Map<string, string>
-    links: Map<string, string>
+    changeLog: object
+    links: object
     created: string
     lastUpdate: string
 }

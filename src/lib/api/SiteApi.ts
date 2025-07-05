@@ -1,6 +1,7 @@
 import type {SiteApiOptions} from "$lib/types/api";
 import AuthApi from "$lib/api/AuthApi";
 import ProjectsApi from "$lib/api/ProjectsApi";
+import {sendToast} from "$lib/store/Toasts";
 
 export class SiteApi {
     authorization: string = ""
@@ -47,7 +48,7 @@ export class SiteApi {
         })
     }
 
-    async put(path: string, body: unknown, contentType: string): Promise<Response | undefined> {
+    async put(path: string, body: string, contentType: string): Promise<Response | undefined> {
         if (this.authorization == "") return
 
         return await fetch(`${this.options.url}/${path}`, {
@@ -56,7 +57,7 @@ export class SiteApi {
                 "Authorization": this.authorization,
                 "Content-Type": contentType
             },
-            body: JSON.stringify(body)
+            body: body
         })
     }
 
@@ -82,5 +83,19 @@ export class SiteApi {
                 "Authorization": this.authorization,
             }
         })
+    }
+
+    async getMcCache(): Promise<McMeta> {
+        const response = await this.get("/meta/mc")
+
+        if (response.ok) {
+            return await response.json() as McMeta
+        } else {
+            sendToast({
+                message: "Failed to get MC Meta",
+                type: "warning"
+            })
+            return {versions: [], latestVersion: ""}
+        }
     }
 }
