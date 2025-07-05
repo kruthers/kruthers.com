@@ -1,10 +1,10 @@
 import {writable, type Writable} from "svelte/store";
 import {browser} from "$app/environment";
 import {SiteApi} from "$lib/api/SiteApi";
-import {PUBLIC_API_PATH} from "$env/static/public";
+import { env } from "$env/dynamic/public";
 
 export const api = new SiteApi({
-    url: PUBLIC_API_PATH,
+    url: env.PUBLIC_API_PATH,
     access_token: (browser ? localStorage.getItem("token") : '')
 })
 
