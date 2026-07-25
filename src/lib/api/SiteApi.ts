@@ -2,6 +2,7 @@ import type {SiteApiOptions} from "$lib/types/api";
 import AuthApi from "$lib/api/AuthApi";
 import ProjectsApi from "$lib/api/ProjectsApi";
 import {sendToast} from "$lib/store/Toasts";
+import CdnAPi from "$lib/api/CdnAPi";
 
 export class SiteApi {
     authorization: string = ""
@@ -15,6 +16,7 @@ export class SiteApi {
     //api groups
     public readonly auth = new AuthApi(this)
     public readonly projects = new ProjectsApi(this)
+    public readonly cdn = new CdnAPi(this)
 
     /**
      * Sets the authorization token of this API
@@ -26,12 +28,12 @@ export class SiteApi {
         return this
     }
 
-    async get(path: string): Promise<Response> {
-        const headers = new Headers()
-        headers.append("Authorization", this.authorization)
+    async get(path: string, headers?: Headers): Promise<Response> {
+        const headers1 = headers ?? new Headers()
+        headers1.append("Authorization", this.authorization)
         return await fetch(`${this.options.url}/${path}`, {
             method: "GET",
-            headers: headers
+            headers: headers1
         })
     }
 
@@ -45,6 +47,18 @@ export class SiteApi {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(body)
+        })
+    }
+
+    async postFormData(path: string, body: FormData): Promise<Response | undefined> {
+        if (this.authorization == "") return
+
+        return await fetch(`${this.options.url}/${path}`, {
+            method: "POST",
+            headers: {
+                "Authorization": this.authorization
+            },
+            body
         })
     }
 
@@ -97,5 +111,9 @@ export class SiteApi {
             })
             return {versions: [], latestVersion: ""}
         }
+    }
+
+    public hasAuth(): boolean {
+        return this.authorization != ""
     }
 }
