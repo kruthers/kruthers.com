@@ -1,40 +1,42 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+
 @plugin "daisyui/theme" {
-  name: "main";
-  default: true;
+  name: "personal";
+  default: false;
   prefersdark: false;
   color-scheme: "dark";
-  --color-base-100: oklch(60% 0 0);
-  --color-base-200: oklch(50% 0 0);
-  --color-base-300: oklch(40% 0 0);
-  --color-base-content: oklch(90% 0 0);
-  --color-primary: oklch(41.703% 0.099 251.473);
-  --color-primary-content: oklch(88.34% 0.019 251.473);
-  --color-secondary: oklch(0.551 0.026 242.208);
-  --color-secondary-content: oklch(12.818% 0.005 229.389);
-  --color-accent: oklch(44% 0.119 151.328);
-  --color-accent-content: oklch(13.454% 0.033 35.791);
-  --color-neutral: oklch(44% 0.043 257.281);
-  --color-neutral-content: oklch(85.488% 0.002 253.041);
-  --color-info: oklch(62.616% 0.143 240.033);
-  --color-info-content: oklch(12.523% 0.028 240.033);
-  --color-success: oklch(72% 0.219 149.579);
-  --color-success-content: oklch(14.045% 0.018 156.596);
-  --color-warning: oklch(0.81 0.163 99.908);
-  --color-warning-content: oklch(15.496% 0.023 81.519);
-  --color-error: oklch(57% 0.245 27.325);
-  --color-error-content: oklch(90.322% 0.029 29.674);
-  --radius-selector: 0rem;
-  --radius-field: 0.25rem;
-  --radius-box: 0.25rem;
+  --color-base-100: oklch(31.2% 0.030 277.508);
+  --color-base-200: oklch(27.8% 0.019 277.508);
+  --color-base-300: oklch(26% 0.010 277.508);
+  --color-base-content: oklch(97.747% 0.007 106.545);
+  --color-primary: oklch(62% 0.214 259.815);
+  --color-primary-content: oklch(15.092% 0.036 346.812);
+  --color-secondary: oklch(65% 0.241 354.308);
+  --color-secondary-content: oklch(14.84% 0.029 301.883);
+  --color-accent: oklch(83.392% 0.124 66.558);
+  --color-accent-content: oklch(16.678% 0.024 66.558);
+  --color-neutral: oklch(39.445% 0.032 275.524);
+  --color-neutral-content: oklch(87.889% 0.006 275.524);
+  --color-info: oklch(88.263% 0.093 212.846);
+  --color-info-content: oklch(17.652% 0.018 212.846);
+  --color-success: oklch(87.099% 0.219 148.024);
+  --color-success-content: oklch(17.419% 0.043 148.024);
+  --color-warning: oklch(95.533% 0.134 112.757);
+  --color-warning-content: oklch(19.106% 0.026 112.757);
+  --color-error: oklch(68.22% 0.206 24.43);
+  --color-error-content: oklch(13.644% 0.041 24.43);
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
   --depth: 0;
   --noise: 0;
 }
+
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
