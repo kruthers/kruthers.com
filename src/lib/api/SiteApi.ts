@@ -3,6 +3,7 @@ import AuthApi from "$lib/api/AuthApi";
 import ProjectsApi from "$lib/api/ProjectsApi";
 import {sendToast} from "$lib/store/Toasts";
 import CdnAPi from "$lib/api/CdnAPi";
+import PostsAPi from "$lib/api/PostsAPI";
 
 export class SiteApi {
     authorization: string = ""
@@ -17,6 +18,7 @@ export class SiteApi {
     public readonly auth = new AuthApi(this)
     public readonly projects = new ProjectsApi(this)
     public readonly cdn = new CdnAPi(this)
+    public readonly posts = new PostsAPi(this)
 
     /**
      * Sets the authorization token of this API
