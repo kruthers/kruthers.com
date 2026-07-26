@@ -4,9 +4,10 @@
 
     import AlertToastContainer from "$lib/components/alerts/AlertToastContainer.svelte";
     import Icon from "@iconify/svelte";
-    import {copyWithAlert} from "$lib/utils/CopyUtils"; // Import the CSS
+    import {copyWithAlert} from "$lib/utils/CopyUtils";
     import { resolve } from '$app/paths';
     import projectPages from "$lib/types/projects/pages"
+    import { userToken } from '$lib/utils/api';
 
 	let { children } = $props();
 
@@ -96,11 +97,13 @@
         <a href="https://svelte.dev" class="link link-hover">Svelte</a>
     </nav>
     <nav>
-        <h6 class="footer-title">Quick Links</h6>
-        <a href={resolve("/")} class="link link-hover">Home Page</a>
+        <h6 class="footer-title">Pages</h6>
         <a href={resolve("/downloads")} class="link link-hover">Downloads</a>
         <a href={resolve("/contact")} class="link link-hover">Contact Me</a>
         <a href={resolve("/landing")} class="link link-hover">Old Sites</a>
+        {#if $userToken}
+            <a href={resolve("/admin")} class="link link-hover">Admin</a>
+        {/if}
     </nav>
     <nav>
         <h6 class="footer-title">Socials</h6>

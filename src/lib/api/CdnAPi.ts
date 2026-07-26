@@ -87,6 +87,26 @@ export default class CdnAPi {
         }
     }
 
+    async deleteFile(path: string): Promise<boolean> {
+        if (!this.api.hasAuth()) return false
+        const response = await this.api.delete(`files?path=${encodeURIComponent(path)}`)
+        if (response?.ok) {
+            sendToast({
+                message: "File deleted successfully",
+                type: "success",
+            })
+            return true
+        } else {
+            console.log("Failed to delete file")
+            console.log((await response?.text()) ?? "Not authenticated")
+            sendToast({
+                message: "Failed to delete file",
+                type: "error",
+            })
+            return false
+        }
+    }
+
 }
 
 type FinishCdnUpload = {

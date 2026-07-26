@@ -1,6 +1,10 @@
 <script lang="ts">
-    export var title: string
-    export var description: string
+    /**
+     * @property {string} title - The title of the page
+     * @property {string} description - The description of the page
+     */
+    type Props = {title: string, description: string}
+    let { title, description }: Props = $props();
 
     import { page } from '$app/state';
 </script>

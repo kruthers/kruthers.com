@@ -3,9 +3,16 @@ export type SiteApiOptions = {
     access_token?: string | null,
 }
 
+/* Auth API */
+export interface Token {
+    tokenId: string,
+    expires: string,
+    name: string
+}
 
 /* CDN API */
 export interface CdnFileEntry {
+    /** The Path of the file */
     name: string,
     type: FileType,
     size: number

@@ -21,3 +21,21 @@ export function getOrdinal(n: number): string {
         default: return `${n}th`;
     }
 }
+
+/**
+ * Opens a modal by its id
+ * @param id
+ */
+export function openModal(id: string) {
+    const modal = document.getElementById(id) as HTMLDialogElement
+    modal.showModal()
+}
+
+/**
+ * Closes a modal by its id
+ * @param id
+ */
+export function closeModal(id: string) {
+    const modal = document.getElementById(id) as HTMLDialogElement
+    modal.close()
+}

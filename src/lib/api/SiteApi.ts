@@ -4,6 +4,7 @@ import ProjectsApi from "$lib/api/ProjectsApi";
 import {sendToast} from "$lib/store/Toasts";
 import CdnAPi from "$lib/api/CdnAPi";
 import PostsAPi from "$lib/api/PostsAPI";
+import {userToken} from "$lib/utils/api";
 
 export class SiteApi {
     authorization: string = ""
@@ -28,6 +29,26 @@ export class SiteApi {
     setToken(access_token: string): SiteApi {
         this.authorization = `Bearer ${access_token}`
         return this
+    }
+
+    private async fetch(path: string, init: ResponseInit): Promise<Response> {
+        const headers = new Headers(init.headers)
+        headers.append("Authorization", this.authorization)
+        const response = await fetch(`${this.options.url}/${path}`, {
+            ...init,
+            headers: headers
+        })
+        if (response.status == 401 || response.status == 403) {
+            //reset user authentication
+            this.authorization = ""
+            userToken.set(undefined)
+            //send error toast
+            sendToast({
+                message: "Authorization session expired.",
+                type: "warning"
+            })
+        }
+        return response
     }
 
     async get(path: string, headers?: Headers): Promise<Response> {
