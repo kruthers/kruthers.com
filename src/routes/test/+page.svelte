@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Markdown from "$lib/components/Markdown.svelte";
+    import MarkdownContainer from "$lib/components/MarkdownContainer.svelte";
 
     async function getData(): Promise<string> {
         let response = await fetch("markdown-cheat-sheet.md");
@@ -11,6 +11,6 @@
     {#await getData()}
         <span class="loading loading-spinner loading-xl"></span>
     {:then markdown}
-        <Markdown content={markdown} />
+        <MarkdownContainer content={markdown} />
     {/await}
 </div>

@@ -1,5 +1,5 @@
 import {SiteApi} from "$lib/api/SiteApi";
-import type {FullPost, PostsPage} from "$lib/types/api";
+import type {FullPost, Post, PostsPage, PostUpdate} from "$lib/types/api";
 import {sendToast} from "$lib/store/Toasts";
 
 export default class PostsAPi {
@@ -38,10 +38,40 @@ export default class PostsAPi {
         }
     }
 
-    public async savePost(post: FullPost): Promise<boolean> {
+    private errorPost(noPosts: boolean): Post {
+        return  {
+            id: "null",
+            description: noPosts ?
+                "This placeholder will show the latest post once the posts API is connected." :
+                "An error occurred fetching the latest post. Please try again later.",
+            image: null,
+            published: new Date().toISOString(),
+            quickLink: "null",
+            tags: ["General","Error"],
+            title: noPosts ? "Latest project update coming soon" : "Failed to fetch latest post",
+        }
+    }
+
+    public async getLatest(): Promise<Post> {
+        try {
+            const response = await this.api.get(`feed/latest`)
+            if (response.ok) {
+                return await response.json() as Post
+            } else {
+                console.log("Failed to get latest post")
+                console.log(await response.text())
+                return this.errorPost(response.status === 404)
+            }
+        } catch (e) {
+            console.log("Failed to get latest post")
+            console.log(e)
+            return this.errorPost(true)
+        }
+    }
+
+    public async savePost(id: string, data: PostUpdate): Promise<boolean> {
         if (!this.api.hasAuth()) return false
-        post.lastEdit = new Date().toISOString()
-        const response = await this.api.post("feed", post)
+        const response = await this.api.post(`feed/${id}`, data)
         if (response?.ok) {
             sendToast({
                 message: "Post saved",
@@ -53,6 +83,26 @@ export default class PostsAPi {
             console.log(await response?.text())
             sendToast({
                 message: "Failed to save post",
+                type: "error",
+            })
+            return false
+        }
+    }
+
+    public async createPost(data: PostUpdate): Promise<boolean> {
+        if (!this.api.hasAuth()) return false
+        const response = await this.api.post("feed", data)
+        if (response?.ok) {
+            sendToast({
+                message: "Post created",
+                type: "success",
+            })
+            return true
+        } else {
+            console.log("Failed to create post")
+            console.log(await response?.text())
+            sendToast({
+                message: "Failed to create post",
                 type: "error",
             })
             return false

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui";
+@plugin "@tailwindcss/typography";
 
 
 @plugin "daisyui/theme" {
@@ -73,55 +74,72 @@ img.pixels {
   padding-left: 0;
 }
 
-.markdown {
-  @apply prose sm:prose max-w-none;
+/** Markdown editor */
+.carta-theme__kruthers {
+  --input-color: color-mix(in oklab, var(--color-base-content) 20%, #0000);
+  &.carta-editor {
+    @apply bg-base-100 rounded-field border overflow-clip;
+    border: var(--border) solid var(--input-color);
+
+    &:focus-within {
+      @apply outline-2 outline-offset-2;
+    }
+
+    .carta-wrapper {
+      padding: 1rem;
+      flex-grow: 1;
+    }
+
+    .carta-font-code {
+      font-family: 'Fira Code', monospace;
+      caret-color: white;
+      font-size: 1.1rem;
+    }
+
+    .carta-toolbar {
+      @apply rounded-t bg-base-200;
+      height: 2.5rem;
+
+      .carta-icon {
+        @apply btn p-0 h-8 w-8 btn-ghost btn-accent;
+      }
+    }
+
+    .carta-toolbar-left {
+      /*@apply pl-2;*/
+
+      & > * {
+        @apply hover:text-base-content relative inline-flex cursor-pointer appearance-none flex-wrap items-center justify-center text-center select-none;
+        @apply ml-4 mr-4 px-3 text-base-content/50;
+        font-size: 0.95rem;
+      }
+
+      button {
+        height: 100%;
+      }
+
+      .carta-active {
+        @apply border-b-2 border-base-content text-base-content;
+      }
+    }
+
+    .carta-toolbar-right {
+      @apply pr-3;
+    }
+
+    .carta-input-wrapper,
+    .carta-renderer {
+      @apply min-h-32 max-h-96;
+      overflow: auto;
+    }
+
+    .carta-renderer > * {
+      @apply prose max-w-none;
+    }
+  }
 }
 
-.markdown h1 {
-  @apply text-3xl font-bold mt-6 mb-4;
-}
-
-.markdown h2 {
-  @apply text-2xl font-semibold mt-5 mb-3;
-}
-
-.markdown h3 {
-  @apply text-xl font-semibold mt-5 mb-3;
-}
-
-.markdown p {
-  @apply mb-4;
-}
-
-.markdown ul {
-  @apply pl-5 list-disc mb-4;
-}
-.markdown ol {
-  @apply pl-5 list-decimal mb-4;
-}
-
-.markdown li {
-  @apply mb-2 leading-relaxed;
-}
-
-.markdown a {
-  @apply text-primary hover:underline;
-}
-
-.markdown pre {
-  @apply bg-base-200 p-4 rounded;
-}
-
-.markdown code {
-  @apply bg-base-200 text-sm px-1 rounded;
-}
-
-.markdown blockquote {
-  @apply border-l-4 border-base-300 pl-4 italic text-base-content/80;
-}
-
-.markdown th,
-.markdown td,
-.markdown table {
-  @apply border-1 border-base-300
-}
+/*html.dark .carta-theme__kruthers .shiki,*/
+/*html.dark .carta-theme__kruthers .shiki span {*/
+/*  color: var(--color-base-content) !important;*/
+/*}*/

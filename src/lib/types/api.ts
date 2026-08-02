@@ -38,6 +38,7 @@ export interface Post {
     image: string | null,
     description: string,
     published: string,
+    quickLink: string
 }
 
 export interface PostReference {
@@ -51,6 +52,7 @@ export interface FullPost extends Post {
     content: string,
     lastEdit: string | null,
     references: PostReference[]
+    hidden?: boolean
 }
 
 export interface PostsPage {
@@ -59,6 +61,16 @@ export interface PostsPage {
     count: number,
     totalPages: number,
     totalPosts: number,
+}
+
+export type PostUpdate = {
+    title: string,
+    description: string,
+    content: string,
+    tags?: string[],
+    image?: string | null,
+    references?: PostReference[]
+    hidden?: boolean
 }
 
 
