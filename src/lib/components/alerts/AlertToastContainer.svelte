@@ -9,7 +9,7 @@
     $: $toasts = $toasts;
 </script>
 
-<div class="toast">
+<div class="toast toast-top toast-end">
     {#each $toasts as toast (toast.id)}
         {#if (toast.type === "info")}
             <Info>{toast.message}</Info>

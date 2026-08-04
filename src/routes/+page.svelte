@@ -4,15 +4,8 @@
     import { resolve } from "$app/paths";
     import PageInfo from "$lib/components/PageInfo.svelte";
     import Icon from "@iconify/svelte";
-
-    const latestPost: Post = {
-        id: "placeholder-latest-post",
-        title: "Latest project update coming soon",
-        tags: ["news", "projects"],
-        image: null,
-        description: "This placeholder will show the latest post once the posts API is connected.",
-        published: new Date().toISOString()
-    };
+    import PostOverview from "$lib/components/posts/PostOverview.svelte";
+    import {api} from "$lib/utils/api";
 </script>
 
 <PageInfo
@@ -65,30 +58,23 @@
         </section>
 
         <section>
-            <a
-                href={resolve("/posts/[slug]", { slug: latestPost.id })}
-                class="card bg-primary text-primary-content shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-            >
-                <div class="card-body">
+            {#await api.posts.getLatest()}
+                <div class="skeleton h-40 w-full"></div>
+            {:then latestPost}
+                {#snippet header()}
                     <div class="flex flex-wrap items-center gap-2">
                         <span class="badge badge-secondary">Latest post</span>
-                        <span class="text-xs opacity-80">
-                            <FormattedDate date={latestPost.published} />
-                        </span>
+                        <span class="text-xs opacity-80"><FormattedDate date={latestPost.published} includeTime={false} /></span>
                     </div>
-
-                    <h2 class="card-title">{latestPost.title}</h2>
-                    <p class="text-sm opacity-90">{latestPost.description}</p>
-
-                    <div class="mt-auto flex flex-wrap gap-2">
-                        {#each latestPost.tags as tag (tag)}
-                            <span class="badge badge-outline border-primary-content/50 text-primary-content">
-                                {tag}
-                            </span>
-                        {/each}
-                    </div>
-                </div>
-            </a>
+                {/snippet}
+                {#if latestPost.id == "null"}
+                    <PostOverview post={latestPost} showDate={false} {header} />
+                {:else}
+                    <a href={resolve("/posts/[slug]", { slug: latestPost.quickLink })}>
+                        <PostOverview post={latestPost} showDate={false} {header} />
+                    </a>
+                {/if}
+            {/await}
         </section>
 
         <section class="grid gap-6 lg:grid-cols-3">

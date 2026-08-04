@@ -31,9 +31,9 @@ export class SiteApi {
         return this
     }
 
-    private async fetch(path: string, init: ResponseInit): Promise<Response> {
+    private async fetch(path: string, init: RequestInit): Promise<Response> {
         const headers = new Headers(init.headers)
-        headers.append("Authorization", this.authorization)
+        if (this.authorization != "") headers.append("Authorization", this.authorization)
         const response = await fetch(`${this.options.url}/${path}`, {
             ...init,
             headers: headers
@@ -52,21 +52,18 @@ export class SiteApi {
     }
 
     async get(path: string, headers?: Headers): Promise<Response> {
-        const headers1 = headers ?? new Headers()
-        headers1.append("Authorization", this.authorization)
-        return await fetch(`${this.options.url}/${path}`, {
+        return await this.fetch(path, {
             method: "GET",
-            headers: headers1
+            headers: headers
         })
     }
 
     async post(path: string, body: unknown): Promise<Response | undefined> {
         if (this.authorization == "") return
 
-        return await fetch(`${this.options.url}/${path}`, {
+        return await this.fetch(path, {
             method: "POST",
             headers: {
-                "Authorization": this.authorization,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(body)
@@ -76,22 +73,18 @@ export class SiteApi {
     async postFormData(path: string, body: FormData): Promise<Response | undefined> {
         if (this.authorization == "") return
 
-        return await fetch(`${this.options.url}/${path}`, {
+        return await fetch(path, {
             method: "POST",
-            headers: {
-                "Authorization": this.authorization
-            },
             body
         })
     }
 
-    async put(path: string, body: string, contentType: string): Promise<Response | undefined> {
+    async put(path: string, body: string, contentType: string = "application/json"): Promise<Response | undefined> {
         if (this.authorization == "") return
 
-        return await fetch(`${this.options.url}/${path}`, {
+        return await this.fetch(path, {
             method: "PUT",
             headers: {
-                "Authorization": this.authorization,
                 "Content-Type": contentType
             },
             body: body
@@ -101,10 +94,9 @@ export class SiteApi {
     async patch(path: string, body: unknown): Promise<Response | undefined> {
         if (this.authorization == "") return
 
-        return await fetch(`${this.options.url}/${path}`, {
+        return await this.fetch(path, {
             method: "PATCH",
             headers: {
-                "Authorization": this.authorization,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(body)
@@ -114,7 +106,7 @@ export class SiteApi {
     async delete(path: string): Promise<Response | undefined> {
         if (this.authorization == "") return
 
-        return await fetch(`${this.options.url}/${path}`, {
+        return await this.fetch(path, {
             method: "DELETE",
             headers: {
                 "Authorization": this.authorization,

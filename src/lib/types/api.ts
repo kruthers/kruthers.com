@@ -38,7 +38,8 @@ export interface Post {
     image: string | null,
     description: string,
     published: string,
-    quickLink: string
+    quickLink: string,
+    hidden?: boolean
 }
 
 export interface PostReference {
@@ -52,7 +53,6 @@ export interface FullPost extends Post {
     content: string,
     lastEdit: string | null,
     references: PostReference[]
-    hidden?: boolean
 }
 
 export interface PostsPage {

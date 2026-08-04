@@ -9,13 +9,13 @@ export default class PostsAPi {
         this.api = api
     }
 
-    public async getPosts(page: number = 1, count: number = 10): Promise<PostsPage> {
-        const response = await this.api.get(`feed?page=${page}&count=${count}`)
+    public async getPosts(page: number = 1, count: number = 10, includeHidden: boolean = false): Promise<PostsPage> {
+        const response = await this.api.get(`feed?page=${page}&count=${count}&show_hidden=${includeHidden}`)
         if (response.ok) {
             return await response.json() as PostsPage
         } else {
             console.log("Failed to get posts")
-            console.log(await response.text())
+            console.log(await response.json())
             sendToast({
                 message: "Failed to get posts",
                 type: "error",
@@ -30,7 +30,7 @@ export default class PostsAPi {
             return await response.json() as FullPost
         } else {
             console.log("Failed to get post")
-            console.log(await response.text())
+            console.log(await response.json())
             sendToast({
                 message: "Failed to get post",
                 type: "error",
@@ -38,7 +38,7 @@ export default class PostsAPi {
         }
     }
 
-    private errorPost(noPosts: boolean): Post {
+    public errorPost(noPosts: boolean): Post {
         return  {
             id: "null",
             description: noPosts ?
@@ -79,7 +79,7 @@ export default class PostsAPi {
             })
             return true
         } else {
-            console.log("Failed to save post")
+            console.log(`Failed to save post: ${response?.status}`)
             console.log(await response?.text())
             sendToast({
                 message: "Failed to save post",
@@ -91,7 +91,7 @@ export default class PostsAPi {
 
     public async createPost(data: PostUpdate): Promise<boolean> {
         if (!this.api.hasAuth()) return false
-        const response = await this.api.post("feed", data)
+        const response = await this.api.put("feed", JSON.stringify(data))
         if (response?.ok) {
             sendToast({
                 message: "Post created",

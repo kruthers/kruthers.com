@@ -1,7 +1,12 @@
 <script lang="ts">
     import {getOrdinal} from "$lib/utils/Utils";
 
-    export var date: string
+    type Props = {
+        date: string,
+        includeTime?: boolean
+    }
+
+    let { date, includeTime = true }: Props = $props()
 
     function formatDate(dateString: string): string {
         const date = new Date(dateString)
@@ -14,7 +19,7 @@
             hour12: true,
         }).toLowerCase()
 
-        return `${month} ${day}, ${year} at ${time}`
+        return includeTime ? `${day} ${month} ${year} at ${time}` : `${day} ${month} ${year}`
     }
 </script>
 
