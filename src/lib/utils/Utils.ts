@@ -22,6 +22,14 @@ export function getOrdinal(n: number): string {
     }
 }
 
+export function sanitizeID(input: string): string {
+    return input
+        .trim() // remove tailing/ leading whitespace
+        .replace(/[^a-zA-Z0-9\-_\s]/g, '') //sanitize to just be standard letters/ whitespace
+        .replace(/\s+/g, "_") //swap whitespace for underscores
+        .toLowerCase()
+}
+
 /**
  * Opens a modal by its id
  * @param id

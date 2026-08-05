@@ -1,5 +1,6 @@
 <script lang="ts">
     import type {RawProject} from "$lib/types/projects/ProjectData";
+    import {resolve} from "$app/paths";
 
     let {data}: {data: RawProject} = $props();
 </script>
@@ -10,7 +11,7 @@
         <img src={data.image} alt="pfp" class="rounded-3xl"/>
     </figure>
     <div class="card-body items-center text-center">
-        <h2 class="card-title"><a href="downloads/{data.id}" class="hover:underline" >{data.name}</a></h2>
+        <h2 class="card-title"><a href={resolve("/downloads/[slug]", {slug: data.id})} class="hover:underline" >{data.name}</a></h2>
         <p>{data.overview}</p>
     </div>
 </div>

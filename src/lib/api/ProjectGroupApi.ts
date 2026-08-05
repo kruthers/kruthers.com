@@ -2,9 +2,8 @@ import type {ProjectBase} from "$lib/types/projects/ProjectData";
 import {SiteApi} from "$lib/api/SiteApi";
 import {sendToast} from "$lib/store/Toasts";
 import type {BaseFile} from "$lib/types/projects/FileData";
-import {invalidateAll} from "$app/navigation";
 
-export default class ProjectGroupApi {
+export default class ProjectGroupApi<ProjectType extends ProjectBase> {
     private readonly api: SiteApi
     public readonly group: string
     private readonly path: string
@@ -44,7 +43,7 @@ export default class ProjectGroupApi {
     async getProject(project : string) {
         const result = await this.get(`${project}`)
         if (result.ok) {
-            return await result.json() as ProjectBase
+            return await result.json() as ProjectType
         } else {
             if (result.status != 404) console.log(`Failed to find project: ${result.status}: ${await result.text()}`)
             return
@@ -62,7 +61,7 @@ export default class ProjectGroupApi {
                 message: `Update changelog for ${project} version ${version}`,
                 type: "success"
             })
-            return await result.json() as ProjectBase
+            return await result.json() as ProjectType
         } else {
             sendToast({
                 message: `Failed to update changelog for ${project} version ${version}`,
@@ -73,7 +72,7 @@ export default class ProjectGroupApi {
         }
     }
 
-    async editProject(project: ProjectBase) {
+    async editProject(project: ProjectType) {
         const result = await this.patch(`${project.id}`, project)
         if (result?.ok) {
             sendToast({
@@ -81,7 +80,7 @@ export default class ProjectGroupApi {
                 duration: 10,
                 type: "success"
             })
-            return await result.json() as ProjectBase
+            return await result.json() as ProjectType
         } else {
             if (result?.status != 404 && result) {
                 console.log(`Failed to update project: ${result.status}: ${await result.text()}`)
@@ -112,6 +111,28 @@ export default class ProjectGroupApi {
             }
             sendToast({
                 message: "Failed to update file",
+                type: "error"
+            })
+            return
+        }
+    }
+
+    async createProject(project: ProjectType): Promise<ProjectType| undefined> {
+        console.log(project as never)
+        const result = await this.post(project.id, project as never)
+        if (result?.ok) {
+            sendToast({
+                message: "Project Created",
+                duration: 10,
+                type: "success"
+            })
+            return await result.json() as ProjectType
+        } else {
+            if (result?.status != 404 && result) {
+                console.log(`Failed to create project: ${result.status}: ${await result.text()}`)
+            }
+            sendToast({
+                message: "Failed to create project",
                 type: "error"
             })
             return

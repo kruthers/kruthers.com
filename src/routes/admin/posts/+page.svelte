@@ -164,7 +164,7 @@
     <div class="modal-box max-w-2xl">
         <h3 class="text-lg font-bold">Create new post</h3>
 
-        <form class="mt-6 flex flex-col gap-4" onsubmit={createPost}>
+        <form class="mt-6 flex flex-col gap-2" onsubmit={createPost}>
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Image</legend>
                 <input class="file-input w-full" type="file" name="image" accept="image/*"/>
