@@ -8,6 +8,13 @@
     import type {FullPost, Post} from "$lib/types/api";
     import Icon from "@iconify/svelte";
     import PostEditor from "$lib/components/posts/PostEditor.svelte";
+    import {adminMeta} from "$lib/store/AdminStore";
+
+    adminMeta.set({
+        pages: [
+            { name: "Posts", path: "/admin/posts", icon: "mdi:file-tree" },
+        ]
+    });
 
     let refresh: () => void = $state(() => {})
     let postToDelete: Post | undefined = $state();

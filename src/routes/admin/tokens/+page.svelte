@@ -6,6 +6,13 @@
     import {api} from "$lib/utils/api";
     import FormattedDate from "$lib/components/FormattedDate.svelte";
     import {sendToast} from "$lib/store/Toasts";
+    import {adminMeta} from "$lib/store/AdminStore";
+
+    adminMeta.set({
+        pages: [
+            { name: "Tokens", path: "/admin/tokens", icon: "mdi:robot" },
+        ]
+    });
 
     let tokens: Promise<Token[]> = $state(api.auth.getTokens())
     let newToken: string | undefined = $state()

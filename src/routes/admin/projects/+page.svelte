@@ -6,6 +6,13 @@
     import RawProjectCard from "$lib/components/projects/RawProjectCard.svelte";
     import {openModal} from "$lib/utils/Utils";
     import PageInfo from "$lib/components/PageInfo.svelte";
+    import {adminMeta} from "$lib/store/AdminStore";
+
+    adminMeta.set({
+        pages: [
+            { name: "Projects", path: "/admin/projects", icon: "mdi:folder-multiple" },
+        ]
+    });
 
     let projects = $state(api.projects.getProjects())
 

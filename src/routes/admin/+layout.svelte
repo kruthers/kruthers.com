@@ -24,7 +24,7 @@
     }
 
     const adminPages: AdminPages[] = [
-        {name: "Tokens", icon: "mdi:key", path: resolve("/admin/tokens")},
+        {name: "Tokens", icon: "mdi:robot", path: resolve("/admin/tokens")},
         {name: "Files", icon: "mdi:file-tree", path: resolve("/admin/files")},
         {name: "Posts", icon: "mdi:post", path: resolve("/admin/posts")},
         {name: "Projects", icon: "mdi:folder-multiple", path: resolve("/admin/projects")},
