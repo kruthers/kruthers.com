@@ -1,3 +1,5 @@
+import type {MinecraftPlatform, MinecraftType} from "$lib/types/projects/MinecraftData";
+
 /** A very basic project */
 export interface RawProject {
     group: string

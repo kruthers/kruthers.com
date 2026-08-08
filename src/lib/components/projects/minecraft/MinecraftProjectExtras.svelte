@@ -7,7 +7,10 @@
     import type {Snippet} from "svelte";
     import {api, userToken} from "$lib/utils/api";
     import ProjectEditModal from "$lib/components/projects/forms/ProjectEditModal.svelte";
-    import MarkdownEditorContainer from "$lib/components/MarkdownEditorContainer.svelte";
+    import CreateVersionModal from "$lib/components/projects/forms/CreateVersionModal.svelte";
+    import type {MinecraftFile, MinecraftFileCreation, RawFile} from "$lib/types/projects/FileData";
+    import CommonMcFeilds from "$lib/components/projects/minecraft/forms/CommonMcFeilds.svelte";
+    import type {MinecraftPlatform} from "$lib/types/projects/MinecraftData";
 
     let {project, children}: {project: ProjectBase, children: Snippet} = $props();
 
@@ -27,6 +30,19 @@
 
         const result = await api.projects.minecraft.editProject(updated)
         return result != undefined
+    }
+
+    async function createVersion(raw: RawFile, formData: FormData): Promise<MinecraftFile | undefined> {
+        const versions = formData.getAll("versions") as string[]
+        const platforms = formData.getAll("platforms") as MinecraftPlatform[]
+
+        const versionInfo: MinecraftFileCreation = {
+            ...raw,
+            gameVersions: versions,
+            platforms: platforms
+        }
+
+        return  await api.projects.minecraft.addFile(project.id, versionInfo)
     }
 </script>
 
@@ -113,4 +129,8 @@
 {#if $userToken}
     <ProjectEditModal project={project} saveProject={saveProject} group="MINECRAFT">
     </ProjectEditModal>
+
+    <CreateVersionModal project={project} {createVersion}>
+        <CommonMcFeilds project={data} />
+    </CreateVersionModal>
 {/if}

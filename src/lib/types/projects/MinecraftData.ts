@@ -1,12 +1,12 @@
-type MinecraftPlatform =
+export type MinecraftPlatform =
     "VANILLA" | "FABRIC" | "FORGE" | "NEO_FORGE" | "BUKKIT" | "SPIGOT" | "PAPER" | "FOLIA" | "SPONGE" | "VELOCITY"
 
-type MinecraftGroup = "all" | "map" | "plugin" | "mod" | "datapack"
+export type MinecraftGroup = "all" | "map" | "plugin" | "mod" | "datapack"
 
-type MinecraftType =
+export type MinecraftType =
     "MAP" | "JAR" | "DATAPACK"
 
-type McPlatformData = {
+export type McPlatformData = {
     id: MinecraftPlatform,
     icon?: string
     name: string,

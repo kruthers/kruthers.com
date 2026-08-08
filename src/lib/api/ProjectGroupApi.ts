@@ -1,9 +1,9 @@
 import type {ProjectBase} from "$lib/types/projects/ProjectData";
 import {SiteApi} from "$lib/api/SiteApi";
 import {sendToast} from "$lib/store/Toasts";
-import type {BaseFile} from "$lib/types/projects/FileData";
+import type {BaseFile, RawFile} from "$lib/types/projects/FileData";
 
-export default class ProjectGroupApi<ProjectType extends ProjectBase> {
+export default class ProjectGroupApi<ProjectType extends ProjectBase, FileType extends BaseFile, FileCreationType extends RawFile> {
     private readonly api: SiteApi
     public readonly group: string
     private readonly path: string
@@ -22,8 +22,8 @@ export default class ProjectGroupApi<ProjectType extends ProjectBase> {
         return this.api.post(`${this.path}/${path}`, body)
     }
 
-    private async put(path: string, body: string, contentType: string) {
-        return this.api.put(`${this.path}/${path}`, body, contentType)
+    private async put(path: string, body: object) {
+        return this.api.put(`${this.path}/${path}`, JSON.stringify(body))
     }
 
     private async patch(path: string, body: unknown) {
@@ -55,7 +55,7 @@ export default class ProjectGroupApi<ProjectType extends ProjectBase> {
             version: version,
             log: change
         }
-        const result = await this.put(`${project}/changelog`, JSON.stringify(data), "application/json")
+        const result = await this.put(`${project}/changelog`, data)
         if (result?.ok) {
             sendToast({
                 message: `Update changelog for ${project} version ${version}`,
@@ -93,24 +93,42 @@ export default class ProjectGroupApi<ProjectType extends ProjectBase> {
         }
     }
 
-    async editFile(project: string, file: string, data: object) {
-        const result = await this.patch(`${project}/file/${file}`, {
-            version: "0.0.0",
-            ...data
-        })
+    async editFile(project: string, data: FileType) {
+        const result = await this.patch(`${project}/file/${data.id}`, data)
         if (result?.ok) {
             sendToast({
                 message: "File Updated",
                 duration: 10,
                 type: "success"
             })
-            return await result.json() as BaseFile
+            return await result.json() as FileType
         } else {
             if (result?.status != 404 && result) {
                 console.log(`Failed to update file: ${result.status}: ${await result.text()}`)
             }
             sendToast({
                 message: "Failed to update file",
+                type: "error"
+            })
+            return
+        }
+    }
+
+    async addFile(project: string, data: FileCreationType) {
+        const result = await this.put(`${project}/file`, data)
+        if (result?.ok) {
+            sendToast({
+                message: "New File Create",
+                duration: 10,
+                type: "success"
+            })
+            return await result.json() as FileType
+        } else {
+            if (result?.status != 404 && result) {
+                console.log(`Failed to create file: ${result.status}: ${await result.text()}`)
+            }
+            sendToast({
+                message: "Failed to create new file",
                 type: "error"
             })
             return

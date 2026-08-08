@@ -21,7 +21,7 @@
 
         const path = page.url.pathname;
         if (path.endsWith("changelog")) return "changelog";
-        if (path.endsWith("files")) return "files";
+        if (path.endsWith("files") || path.includes("/files/")) return "files";
         return "desc";
     });
     function isActive(tab: TabName): string {
@@ -95,7 +95,7 @@
 
         <!-- buttons that show up when FAB is open -->
         <div class="tooltip tooltip-left" data-tip="Upload Version">
-            <button class="btn btn-lg btn-circle btn-info" onclick={() => openModal("upload-version-modal")}>
+            <button class="btn btn-lg btn-circle btn-info" onclick={() => openModal("create-version-modal")}>
                 <Icon icon="mdi:file-upload-outline" height="1.2em" />
             </button>
         </div>

@@ -1,25 +1,25 @@
 import type {MinecraftProject, ProjectBase, RawProject} from "$lib/types/projects/ProjectData";
 import {SiteApi} from "$lib/api/SiteApi";
 import ProjectGroupApi from "$lib/api/ProjectGroupApi";
-import type {BaseFile} from "$lib/types/projects/FileData";
+import type {BaseFile, MinecraftFile, MinecraftFileCreation, RawFile} from "$lib/types/projects/FileData";
 import {sendToast} from "$lib/store/Toasts";
 
 export default class ProjectsApi {
     private readonly api: SiteApi
-    private readonly groups: ProjectGroupApi<ProjectBase>[] = []
+    private readonly groups: ProjectGroupApi<ProjectBase, BaseFile, RawFile>[] = []
 
-    public readonly minecraft: ProjectGroupApi<MinecraftProject>
+    public readonly minecraft: ProjectGroupApi<MinecraftProject, MinecraftFile, MinecraftFileCreation>
 
     constructor(api: SiteApi) {
         this.api = api
-        this.minecraft = new ProjectGroupApi<MinecraftProject>("minecraft", this.api)
+        this.minecraft = new ProjectGroupApi<MinecraftProject, MinecraftFile, MinecraftFileCreation>("minecraft", this.api)
 
         //array of all the groups
         this.groups.push(this.minecraft)
     }
 
-    getGroup(group: string): ProjectGroupApi<ProjectBase> | undefined {
-        const groups = this.groups.filter(g => g.group === group)
+    getGroup(group: string): ProjectGroupApi<ProjectBase, BaseFile, RawFile> | undefined {
+        const groups = this.groups.filter(g => g.group.toUpperCase() === group)
         if (groups.length > 0) {
             return groups[0]
         } else {
