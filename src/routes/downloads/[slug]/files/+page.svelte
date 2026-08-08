@@ -1,34 +1,32 @@
 <script lang="ts">
     import type { PageProps } from './$types';
-    import {onMount} from "svelte";
-    import {error} from "@sveltejs/kit";
     import MinecraftFileList from "$lib/components/projects/minecraft/MinecraftFileList.svelte";
     import type {BaseFile} from "$lib/types/projects/FileData";
     import ProjectFilesList from "$lib/components/projects/page/ProjectFilesList.svelte";
+    import ProjectPageError from "$lib/components/projects/page/ProjectPageError.svelte";
+    import {getProjectPageContext} from "$lib/utils/ProjectContext";
+
     const { data } : PageProps  = $props();
+    const {project} = getProjectPageContext();
 
-    let files: BaseFile[] = $state([])
-    let group: string | undefined = $state()
-
-    onMount(async () => {
-        const filesData = await data.files
-        const proj = await data.project
-        if (proj == undefined) {
-            error(404, `Project with ${data.id} not found`)
-        }
-
-        group = proj.group
-        files = filesData
-    })
+    const filesPromise: Promise<BaseFile[]> = data.files;
 </script>
 
-<div class="bg-base-300 border-base-300 p-6 w-full h-full">
-    {#if (group === "MINECRAFT")}
-        <MinecraftFileList files={files} />
-    {:else if (group)}
-        <ProjectFilesList files={files} />
-    {:else}
-        <span class="loading loading-bars loading-xl"></span>
-        <!--    TODO: skeleton-->
-    {/if}
-</div>
+<section class="min-w-0 rounded-3xl border border-base-300 bg-base-200/60 p-4 shadow-sm sm:p-6">
+    {#await filesPromise}
+        <div class="flex min-h-64 items-center justify-center">
+            <span class="loading loading-bars loading-xl"></span>
+        </div>
+    {:then files}
+        {#if project.group === "MINECRAFT"}
+            <MinecraftFileList files={files} />
+        {:else}
+            <ProjectFilesList files={files} />
+        {/if}
+    {:catch}
+        <ProjectPageError
+                title="Unable to load files"
+                message="An unknown error occurred while loading the files for this project."
+        />
+    {/await}
+</section>

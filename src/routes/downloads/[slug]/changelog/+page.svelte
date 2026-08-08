@@ -1,39 +1,34 @@
 <script lang="ts">
-    import type { PageProps } from './$types';
     import Markdown from "$lib/components/Markdown.svelte";
     import {isPreRelease} from "$lib/utils/Versioning";
-    const { data } : PageProps  = $props();
+    import {getProjectPageContext} from "$lib/utils/ProjectContext";
 
-    const changelogPromise: Promise<Map<string, string>> = data.project.then((p) => {
-        if (p) {
-            return new Map(Object.entries(p.changeLog))
-        } else {
-            return new Map()
-        }
-    })
+    const {project} = getProjectPageContext();
+    const changelog = new Map(Object.entries(project.changeLog));
 </script>
 
-<div role="tablist" class="tabs tabs-lift tabs-lg">
-    <a role="tab" class="tab" href="./">Description</a>
-    <a role="tab" class="tab tab-active" href="./changelog">Changelog</a>
-    <a role="tab" class="tab" href="./files">Files</a>
-</div>
-<div class="bg-base-300 border-base-300 p-6 w-full h-full">
-    {#await changelogPromise}
-        <span class="loading loading-bars loading-xl"></span>
-        <!--    TODO: skeleton-->
-    {:then changelog}
-        <div class="relative pl-6 space-y-10 max-w-3xl mx-auto">
+<section class="min-w-0 rounded-3xl border border-base-300 bg-base-200/60 p-4 shadow-sm sm:p-6">
+    {#if changelog.size === 0}
+        <div class="flex min-h-64 flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-base-300 bg-base-100/60 p-8 text-center">
+            <h2 class="text-xl font-bold">No changelog available</h2>
+            <p class="text-sm text-base-content/60">There are no changelog entries for this project yet.</p>
+        </div>
+    {:else}
+        <div class="mx-auto max-w-3xl space-y-8">
             {#each changelog as [version, changes]}
-                <div class="rounded-lg border-base-100">
-                    <div class="pl-6 border-l-4" class:border-success={!isPreRelease(version)} class:border-error={isPreRelease(version)}>
+                <article class="rounded-2xl border border-base-300 bg-base-100/60 p-4">
+                    <div
+                            class="border-l-4 pl-5"
+                            class:border-success={!isPreRelease(version)}
+                            class:border-error={isPreRelease(version)}
+                    >
                         <h3 class="text-xl font-bold">#{version}</h3>
-                        <div class="text-accent-content p-4 mt-2 prose prose-invert max-w-none">
+                        <div class="mt-3 max-w-none rounded-2xl bg-base-200/70 p-4 text-accent-content">
                             <Markdown content={changes}/>
                         </div>
                     </div>
-                </div>
+                </article>
             {/each}
         </div>
-    {/await}
-</div>
+    {/if}
+</section>

@@ -4,48 +4,89 @@
     import MinecraftVersions from "$lib/components/projects/minecraft/collection/MinecraftVersions.svelte";
     import MinecraftPlatforms from "$lib/components/projects/minecraft/collection/MinecraftPlatforms.svelte";
     import FormattedDate from "$lib/components/FormattedDate.svelte";
+    import type {Snippet} from "svelte";
 
-    export var project: ProjectBase
-    let data = project as MinecraftProject
+    let {project, children}: {project: ProjectBase, children: Snippet} = $props();
+
+    let data = $derived(project as MinecraftProject);
+    let links = $derived(Object.entries(project.links ?? {}));
 </script>
 
-<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
-    <div class="col-span-3">
-        <slot />
-    </div>
+<div class="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
+    <aside class="order-1 rounded-3xl border border-base-300 bg-base-200/70 p-4 shadow-sm lg:order-2 lg:self-start">
+        <div class="grid gap-5 sm:grid-cols-3 lg:grid-cols-1">
+            <section>
+                <h2 class="mb-3 flex items-center gap-2 text-lg font-bold">
+                    <Icon icon="mdi:check-circle-outline" width="1.2em" height="1.2em" />
+                    Supported by
+                </h2>
 
-    <div class="p-4 rounded-box bg-base-300">
-        <h2 class="text-xl mb-2">Supported</h2>
-        <ul class="text-sm space-y-3">
-            <li>
-                <span class="flex items-center"><Icon icon="cil:fork" width="1.2em" height="1.2em" /><strong>Java Versions:</strong></span>
-                <MinecraftVersions versions={data.gameVersions} compact={false} />
-            </li>
-            <li>
-                <span class="flex items-center"><Icon icon="mdi:controller" width="1.2em" height="1.2em" /><strong>Platforms:</strong></span>
-                <MinecraftPlatforms platforms={data.platforms} />
-            </li>
-        </ul>
-        {#if (project.links.size > 0)}
-            <br />
-            <h2 class="text-xl mb-2">Links</h2>
-            <ul class="text-sm space-y-3">
-                {#each project.links as [name,link]}
-                    <li><a href={link}>{name}</a></li>
-                {/each}
-            </ul>
-        {/if}
-        <br />
-        <h2 class="text-xl mb-2">Project Details</h2>
-        <ul class="text-sm space-y-3">
-            <li>
-                <span class="flex items-center"><Icon icon="mdi:clock" width="1.2em" height="1.2em" /> <strong>Published:</strong></span>
-                <FormattedDate date={project.created} />
-            </li>
-            <li>
-                <span class="flex items-center"><Icon icon="mdi:clock" width="1.2em" height="1.2em" /> <strong>Last Update:</strong></span>
-                <FormattedDate date={project.lastUpdate} />
-            </li>
-        </ul>
+                <ul class="space-y-4 text-sm">
+                    <li class="space-y-2">
+                        <span class="flex items-center gap-2 font-semibold text-base-content/80">
+                            <Icon icon="mdi:language-java" width="1.2em" height="1.2em" />
+                            Java Versions
+                        </span>
+                        <MinecraftVersions versions={data.gameVersions} compact={false} />
+                    </li>
+
+                    <li class="space-y-2">
+                        <span class="flex items-center gap-2 font-semibold text-base-content/80">
+                            <Icon icon="mdi:controller" width="1.2em" height="1.2em" />
+                            Platforms
+                        </span>
+                        <MinecraftPlatforms platforms={data.platforms} />
+                    </li>
+                </ul>
+            </section>
+
+            {#if links.length > 0}
+                <section>
+                    <h2 class="mb-3 flex items-center gap-2 text-lg font-bold">
+                        <Icon icon="mdi:link-variant" width="1.2em" height="1.2em" />
+                        Links
+                    </h2>
+
+                    <ul class="space-y-2 text-sm">
+                        {#each links as [name, link] (link)}
+                            <li>
+                                <a class="link link-primary" href={link} rel="external">
+                                    {name}
+                                </a>
+                            </li>
+                        {/each}
+                    </ul>
+                </section>
+            {/if}
+
+            <section>
+                <h2 class="mb-3 flex items-center gap-2 text-lg font-bold">
+                    <Icon icon="mdi:information-outline" width="1.2em" height="1.2em" />
+                    Details
+                </h2>
+
+                <ul class="space-y-4 text-sm">
+                    <li>
+                        <span class="flex items-center gap-2 font-semibold text-base-content/80">
+                            <Icon icon="mdi:calendar-outline" width="1.2em" height="1.2em" />
+                            Published
+                        </span>
+                        <FormattedDate date={project.created} includeTime={false} />
+                    </li>
+
+                    <li>
+                        <span class="flex items-center gap-2 font-semibold text-base-content/80">
+                            <Icon icon="mdi:update" width="1.2em" height="1.2em" />
+                            Last Update
+                        </span>
+                        <FormattedDate date={project.lastUpdate} includeTime={false} />
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </aside>
+
+    <div class="order-2 min-w-0 lg:order-1">
+        {@render children()}
     </div>
 </div>

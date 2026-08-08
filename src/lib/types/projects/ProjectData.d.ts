@@ -15,7 +15,7 @@ export interface RawProject {
 export interface ProjectBase extends RawProject {
     description: string
     changeLog: object
-    links: object
+    links: Record<string, string>
     created: string
     lastUpdate: string
 }

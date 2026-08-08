@@ -1,130 +1,93 @@
 <script lang="ts">
     import type {ProjectBase} from "$lib/types/projects/ProjectData";
+    import type {BaseFile} from "$lib/types/projects/FileData";
+    import {resolve} from "$app/paths";
     import Icon from "@iconify/svelte";
-    import MetaDataList from "$lib/components/projects/page/subpart/MetaDataList.svelte";
+    import type {ResolvedPathname} from "$app/types";
     import {toTitleCase} from "$lib/utils/Utils";
-    import {api, userToken} from "$lib/utils/api";
-    import TagSelector from "$lib/components/TagSelector.svelte";
-    import {sendToast} from "$lib/store/Toasts";
 
-    export var data: ProjectBase
-    let openEdit = false
-
-    function getAvalibleTags(): string[] {
-        let tags: string[] = []
-        switch (data.group) {
-            case "MINECRAFT": {
-                tags.push("minigame","map","admin","tools")
-            }
+    function getGroupPath(group: string): ResolvedPathname {
+        switch (group) {
+            case "MINECRAFT": return "/downloads/minecraft"
+            default: return "/downloads"
         }
-
-        return tags
     }
 
-    function submitEdit(event: SubmitEvent) {
-        event.preventDefault()
-        const formData = new FormData(event.target as HTMLFormElement)
+    let {data, files}: {data: ProjectBase, files: Promise<BaseFile[]>} = $props();
 
-        const edit = {
-            title: formData.get('title'),
-            overview: formData.get('overview'),
-            description: formData.get('description'),
-            tags: formData.getAll('tags')
-        }
-
-        openEdit = false
-
-        sendToast({
-            message: "Updating project..."
-        })
-
-        const proj = data
-        if (edit.title) proj.name = edit.title as string
-        if (edit.overview) proj.overview = edit.overview as string
-        if (edit.description) proj.description = edit.description as string
-        if (edit.tags) proj.tags = edit.tags as string[]
-
-        const group = api.projects.getGroup(proj.group.toLowerCase())
-        group?.editProject(proj)
-    }
+    const latestFile = $derived.by(async () => {
+        const fileList = await files;
+        return fileList.toSorted((a, b) => Date.parse(b.published) - Date.parse(a.published))[0];
+    });
 </script>
 
-<!-- Banner -->
-<div class="space-y-4">
-
-    <!-- Breadcrumbs (Top, Full Width) -->
-    <div class="text-sm breadcrumbs">
-        <ul>
-            <li><a href="/downloads">Downloads</a></li>
-            <li><a href="/downloads/{data.group.toLowerCase()}">{toTitleCase(data.group)}</a></li>
-            <li>{data.id}</li>
-        </ul>
-    </div>
-
-    <!-- Main Content -->
-    <div class="flex flex-col lg:flex-row items-start lg:items-center gap-6">
-
-        <!-- Left: Image -->
-        <div class="flex-shrink-0">
-            <img src={data.image} alt="{data.id}" class="rounded-lg w-48 object-cover" />
-        </div>
-
-        <!-- Middle: Title, Description, Meta -->
-        <div class="flex-1">
-            <h1 class="text-3xl font-bold mb-2">{data.name}</h1>
-            <p class="text-base-content/70 mb-4">
-                {data.overview}
-            </p>
-            <!-- Meta Info with Dividers -->
-            <MetaDataList>
-                {#if (data.credit)}
-                    <li>By {data.credit}</li>
-                {/if}
-                {#if (data)}
-                    <li class="flex items-center gap-1 px-2">
-                        <Icon icon="mdi:tag-multiple-outline" width="1.2em" height="1.2em" />
-                        {#each data.tags as tag}
-                            <div class="badge badge-soft badge-info">{tag}</div>
-                        {/each}
+<header class="overflow-hidden rounded-3xl border border-base-300 bg-linear-to-br from-base-200 to-base-300 shadow-sm">
+    <div class="relative p-5 sm:p-6">
+        <div class="relative flex flex-col gap-5">
+            <div class="breadcrumbs max-w-full overflow-x-auto text-sm text-base-content/70">
+                <ul>
+                    <li><a class="hover:text-primary" href={resolve("/downloads")}>
+                        Downloads
+                    </a></li>
+                    <li><a class="hover:text-primary" href={getGroupPath(data.group)}>
+                        {toTitleCase(data.group)}
+                    </a></li>
+                    <li>
+                        <span class="font-medium text-base-content">{data.name}</span>
                     </li>
-                {/if}
-            </MetaDataList>
-        </div>
+                </ul>
+            </div>
 
-        <!-- Right: Buttons -->
-        <div class="flex gap-2 self-start lg:self-center">
-            {#if ($userToken)} <button class="btn btn-primary" on:click={() => openEdit = true}><Icon icon="mdi:pen" width="1.2em" height="1.2em" /> Edit</button> {/if}
-            <button class="btn btn-outline"><Icon icon="material-symbols:download-rounded" width="1.2em" height="1.2em" /> Download</button>
-        </div>
+            <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                <div class="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-end">
+                    <img src={data.icon} alt={data.name} class="size-20 object-cover shadow-lg sm:size-24"/>
 
-    </div>
-</div>
+                    <div class="min-w-0">
+                        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
+                            {data.name}
+                        </h1>
 
-{#if (openEdit)}
-    <dialog class="modal modal-open">
-        <div class="modal-box max-w-full m-2">
-            <form on:submit={submitEdit} class="space-y-4">
-                <fieldset class="fieldset">
-                    <legend class="fieldset-legend text-lg">Edit Project</legend>
+                        <p class="mt-2 max-w-3xl text-sm leading-relaxed text-base-content/75 sm:text-base">
+                            {data.overview}
+                        </p>
 
-                    <label class="label" for="title">Project Name</label>
-                    <input id="title" name="title" type="text" class="input" value={data.name} />
-
-                    <label class="label" for="overview">Overview</label>
-                    <input id="overview" name="overview" type="text" class="input w-full" value={data.overview} />
-
-                    <label class="label" for="description">Overview</label>
-                    <textarea id="description" name="description" class="textarea textarea-bordered h-28  w-full">{data.description}</textarea>
-
-                    <label class="label" for="tags">Project Tags</label>
-                    <TagSelector id="tags" name="Tags" options={getAvalibleTags()} initial={data.tags} />
-
-                    <div class="modal-action">
-                        <button type="button" class="btn btn-warning" on:click={() => openEdit = false}>Abandon</button>
-                        <button type="submit" class="btn btn-success">Save</button>
+                        <div class="mt-3 flex flex-wrap items-center gap-2">
+                            {#each data.tags as tag (tag)}
+                                <span class="badge badge-soft badge-secondary badge-sm">
+                                    <Icon icon="mdi:tag-multiple-outline" width="1.1em" height="1.1em" />
+                                    {toTitleCase(tag)}
+                                </span>
+                            {/each}
+                        </div>
                     </div>
-                </fieldset>
-            </form>
+                </div>
+
+                <div class="flex shrink-0 lg:justify-end">
+                    {#await latestFile}
+                        <button class="btn btn-primary w-full sm:w-auto" disabled>
+                            <span class="loading loading-spinner loading-sm"></span>
+                            Loading download
+                        </button>
+                    {:then file}
+                        {#if file}
+                            <a class="btn btn-primary w-full sm:w-auto" href={file.link}>
+                                <Icon icon="material-symbols:download-rounded" width="1.3em" height="1.3em" />
+                                Download Latest
+                            </a>
+                        {:else}
+                            <button class="btn btn-disabled w-full sm:w-auto" disabled>
+                                <Icon icon="material-symbols:download-rounded" width="1.3em" height="1.3em" />
+                                No Downloads
+                            </button>
+                        {/if}
+                    {:catch}
+                        <button class="btn btn-disabled w-full sm:w-auto" disabled>
+                            <Icon icon="mdi:alert-circle-outline" width="1.3em" height="1.3em" />
+                            Download Unavailable
+                        </button>
+                    {/await}
+                </div>
+            </div>
         </div>
-    </dialog>
-{/if}
+    </div>
+</header>

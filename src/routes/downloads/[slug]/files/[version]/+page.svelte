@@ -1,27 +1,34 @@
 <script lang="ts">
     import type { PageProps } from './$types';
     import type {BaseFile} from "$lib/types/projects/FileData";
-    import {onMount} from "svelte";
-    import {error} from "@sveltejs/kit";
-    import type {ProjectBase} from "$lib/types/projects/ProjectData";
     import FilePage from "$lib/components/projects/page/FilePage.svelte";
+    import ProjectPageError from "$lib/components/projects/page/ProjectPageError.svelte";
+    import {getProjectPageContext} from "$lib/utils/ProjectContext";
+
     const { data } : PageProps  = $props();
+    const {project} = getProjectPageContext();
 
-    let file: BaseFile | undefined = $state()
-    let project: ProjectBase | undefined = $state()
-
-    onMount(async () => {
-        project = await data.project
-        file = await data.file
-        if (file == undefined) {
-            error(404, `File with ${data.fileID} not found`)
-        }
-    })
+    const filePromise: Promise<BaseFile | undefined> = data.file;
 </script>
 
-{#if (project && file)}
-    <FilePage file={file} project={project} />
-{:else}
-    <span class="loading loading-bars loading-xl"></span>
-    <!-- TODO: skeleton-->
-{/if}
+<section class="min-w-0 rounded-3xl border border-base-300 bg-base-200/60 p-4 shadow-sm sm:p-6">
+    {#await filePromise}
+        <div class="flex min-h-64 items-center justify-center">
+            <span class="loading loading-bars loading-xl"></span>
+        </div>
+    {:then file}
+        {#if file === undefined}
+            <ProjectPageError
+                    title="File not found"
+                    message={`File with ${data.fileID} could not be found.`}
+            />
+        {:else}
+            <FilePage file={file} project={project} />
+        {/if}
+    {:catch}
+        <ProjectPageError
+                title="Unable to load file"
+                message="An unknown error occurred while loading this file."
+        />
+    {/await}
+</section>
