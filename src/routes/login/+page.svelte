@@ -25,7 +25,7 @@ let { data }: { data: PageData } = $props()
                             If you believe you should have access then you are in the wrong place
                             <br/>
                         </p>
-                        <a role="button" class="btn bg-white text-black border-[#e5e5e5]" href={discordUrl}>
+                        <a role="button" class="btn bg-white text-black border-[#e5e5e5]" href={discordUrl} rel="external">
                             <Icon icon="logos:discord-icon" width="1.55em" height="1.2em" />
                             Sign in with Discord
                         </a>
