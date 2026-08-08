@@ -1,3 +1,5 @@
+import type {MinecraftProject} from "$lib/types/projects/ProjectData";
+
 const unknownPlatform: McPlatformData = {
     id: "VANILLA",
     name: "Unknown",
@@ -29,5 +31,31 @@ export function isPluginLoader(plat: MinecraftPlatform) {
 export function getPlatformData(plat: MinecraftPlatform): McPlatformData {
     const options = platforms.filter((p) => p.id === plat)
     return options.length > 0 ? options[0] : unknownPlatform
+}
+
+export function getMcGroupIcon(type: MinecraftGroup): string {
+    switch (type) {
+        case "all": return "mdi:minecraft"
+        case "map": return "mdi:map"
+        case "plugin": return "material-symbols:power-plug-rounded"
+        case "mod": return "mdi:gear-box"
+        case "datapack": return "mdi:box-variant"
+    }
+}
+
+export function getMcGroups(proj: MinecraftProject): MinecraftGroup[] {
+    const groups: MinecraftGroup[] = []
+    //process platforms for jars
+    const platforms = proj.platforms.map(p => getPlatformData(p).type)
+    if (platforms.includes("mod")) groups.push("mod")
+    if (platforms.includes("plugin")) groups.push("plugin")
+
+    //handle maps and datapacks
+    if (proj.type == "MAP") groups.push("map")
+    if (proj.type == "DATAPACK") groups.push("datapack")
+
+    console.log(`MC Groups for ${proj.name}: ${groups.join(", ")}`)
+    //return data
+    return groups
 }
 

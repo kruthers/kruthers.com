@@ -4,7 +4,10 @@ export interface RawProject {
     id: string
     name: string
     overview: string
+    /** @deprecated */
     image: string
+    icon: string,
+    banner: string,
     credit: string | undefined | null
     tags: string[]
 }

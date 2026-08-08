@@ -33,7 +33,7 @@ export default class ProjectGroupApi<ProjectType extends ProjectBase> {
     async getProjects() {
         const result = await this.get("list")
         if (result.ok) {
-            return await result.json() as ProjectBase[]
+            return await result.json() as ProjectType[]
         } else {
             console.log(`Failed to fetch projects for ${this.group}: ${result.status}: ${await result.text()}`)
             return []

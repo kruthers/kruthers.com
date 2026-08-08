@@ -6,16 +6,19 @@
         group: MinecraftGroup
         // eslint-disable-next-line no-undef
         change: (group: MinecraftGroup) => void
-        children: Snippet<[]>
+        children: Snippet
     }
 
     let { group, change, children }: properties = $props();
 
+    let active = $derived(page.url.searchParams.get("type") === group || page.url.searchParams.get("type") === null && group === "all")
+
     import { page } from '$app/state';
+    import {getMcGroupIcon} from "$lib/utils/MinecraftUtils";
+    import Icon from "@iconify/svelte";
 </script>
 
-{#if (page.url.searchParams.get("type") === group)}
-    <a role="tab" class="tab tab-active" href="/downloads/minecraft?type={group}" onclick={() => change(group)}>{@render children()}</a>
-{:else}
-    <a role="tab" class="tab" href="/downloads/minecraft?type={group}" onclick={() => change(group)}>{@render children()}</a>
-{/if}
+<a role="tab" class="tab {active ? "tab-active": ""} flex gap-1" href="/downloads/minecraft?type={group}" onclick={() => change(group)}>
+    <Icon icon={getMcGroupIcon(group)} />
+    {@render children()}
+</a>
