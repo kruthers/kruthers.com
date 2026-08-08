@@ -2,6 +2,7 @@
     import {adminMeta} from "$lib/store/AdminStore";
     import {resolve} from "$app/paths";
     import Icon from "@iconify/svelte";
+    import PageInfo from "$lib/components/PageInfo.svelte";
 
     adminMeta.set({
         pages: []
@@ -9,11 +10,13 @@
 
 </script>
 
+<PageInfo title="Admin Panel" description="Manage the site and its content" />
+
 <main class="mx-auto flex w-full max-w-7xl flex-col gap-4 p-4 sm:p-6">
     <section class="w-full bg-base-200 rounded-box p-3">
         <h1 class="text-3xl font-bold">Admin Panel</h1>
         <p>
-            Welcome to the admin panel for <span class="badge badge-ghost">kruthers.com</span>, control
+            Welcome to the admin panel for <span class="badge badge-soft">kruthers.com</span>, control
             projects, posts and bot tokens. Also access the remote CDN to view files and check its status
         </p>
     </section>

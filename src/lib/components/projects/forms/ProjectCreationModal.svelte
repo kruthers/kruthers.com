@@ -2,6 +2,7 @@
     import type {Snippet} from "svelte";
     import type {ProjectBase} from "$lib/types/projects/ProjectData";
     import {closeModal, sanitizeID, toTitleCase} from "$lib/utils/Utils";
+    import CommonProjectFormInputs from "$lib/components/projects/forms/CommonProjectFormInputs.svelte";
 
     type Props = {
         group: string,
@@ -24,6 +25,8 @@
 
         //create raw project
         const rawProject: ProjectBase = {
+            banner: "/projects/unknown.png",
+            icon: "/projects/unknown.png",
             changeLog: {},
             created: data.get("creation_date") as string,
             credit: creditData == "" ? null : creditData,
@@ -54,57 +57,7 @@
     <div class="modal-box">
         <h2 class="text-lg font-bold">Create new {toTitleCase(group)} project</h2>
         <form class="flex flex-col gap-4" onsubmit={handleCreation}>
-            <fieldset class="fieldset">
-                <label class="floating-label" for={`${modalID}-name`}>
-                    <span>Name</span>
-                    <input
-                            type="text"
-                            class="input validator w-full"
-                            id={`${modalID}-name`}
-                            name="name"
-                            placeholder="Name"
-                            required
-                    />
-                </label>
-                <p class="validator-hint hidden">Name is required</p>
-            </fieldset>
-
-            <fieldset class="fieldset">
-                <label class="floating-label" for={`${modalID}-overview`}>
-                    <span>Overview</span>
-                    <textarea
-                            class="textarea validator w-full"
-                            id={`${modalID}-overview`}
-                            name="overview"
-                            placeholder="Overview"
-                            required
-                    ></textarea>
-                </label>
-                <p class="validator-hint hidden">Overview is required</p>
-            </fieldset>
-
-            <fieldset class="fieldset">
-                <label class="floating-label" for={`${modalID}-credit`}>
-                    <span>Credit</span>
-                    <input type="text" class="input validator" id={`${modalID}-credit`} name="credit" placeholder="Credit"/>
-                </label>
-                <p class="label">Optional</p>
-            </fieldset>
-
-            <fieldset class="fieldset">
-                <label class="floating-label" for={`${modalID}-creation-date`}>
-                    <span>Creation date</span>
-                    <input
-                            type="date"
-                            class="input validator w-full"
-                            id={`${modalID}-creation-date`}
-                            name="creation_date"
-                            placeholder="Creation date"
-                            required
-                    />
-                </label>
-                <p class="validator-hint hidden">Creation date is required</p>
-            </fieldset>
+            <CommonProjectFormInputs {modalID} />
 
             {@render extraFields()}
 

@@ -5,11 +5,29 @@
     import MinecraftPlatforms from "$lib/components/projects/minecraft/collection/MinecraftPlatforms.svelte";
     import FormattedDate from "$lib/components/FormattedDate.svelte";
     import type {Snippet} from "svelte";
+    import {api, userToken} from "$lib/utils/api";
+    import ProjectEditModal from "$lib/components/projects/forms/ProjectEditModal.svelte";
+    import MarkdownEditorContainer from "$lib/components/MarkdownEditorContainer.svelte";
 
     let {project, children}: {project: ProjectBase, children: Snippet} = $props();
 
     let data = $derived(project as MinecraftProject);
     let links = $derived(Object.entries(project.links ?? {}));
+
+    async function saveProject(raw: ProjectBase): Promise<boolean> {
+
+        const updated: MinecraftProject = {
+            ...raw,
+            type: data.type,
+            gameVersions: data.gameVersions,
+            platforms: data.platforms,
+        }
+
+        console.log(updated)
+
+        const result = await api.projects.minecraft.editProject(updated)
+        return result != undefined
+    }
 </script>
 
 <div class="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
@@ -90,3 +108,9 @@
         {@render children()}
     </div>
 </div>
+
+<!--Minecraft Modals-->
+{#if $userToken}
+    <ProjectEditModal project={project} saveProject={saveProject} group="MINECRAFT">
+    </ProjectEditModal>
+{/if}

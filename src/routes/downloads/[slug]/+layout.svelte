@@ -8,6 +8,9 @@
     import ProjectPageError from "$lib/components/projects/page/ProjectPageError.svelte";
     import {setProjectPageContext} from "$lib/utils/ProjectContext";
     import {page} from "$app/state";
+    import { userToken } from "$lib/utils/api";
+    import Icon from "@iconify/svelte";
+    import {openModal} from "$lib/utils/Utils";
 
     const { data, children } : LayoutProps  = $props();
     const projectPromise: Promise<ProjectBase | undefined> = $derived(data.project)
@@ -77,3 +80,31 @@
         {/await}
     </div>
 </main>
+
+<!--Edit project FAB-->
+{#if $userToken}
+    <div class="fab fab-flower">
+        <!-- a focusable div with tabindex is necessary to work on all browsers. role="button" is necessary for accessibility -->
+        <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-secondary">
+            <Icon icon="mdi:application-edit-outline" height="1.2em" />
+        </div>
+
+        <div class="fab-close btn btn-circle btn-lg btn-warning">
+            <Icon icon="mdi:close" height="1.2em" />
+        </div>
+
+        <!-- buttons that show up when FAB is open -->
+        <div class="tooltip tooltip-left" data-tip="Upload Version">
+            <button class="btn btn-lg btn-circle btn-info" onclick={() => openModal("upload-version-modal")}>
+                <Icon icon="mdi:file-upload-outline" height="1.2em" />
+            </button>
+        </div>
+        <div class="tooltip tooltip-left" data-tip="Edit Project">
+            <button class="btn btn-lg btn-circle btn-primary" onclick={() => openModal("edit-project-modal")}>
+                <Icon icon="mdi:file-document-edit" height="1.2em" />
+            </button>
+        </div>
+        <div></div> <!-- Empty elements, may be used for future buttons -->
+        <div></div>
+    </div>
+{/if}

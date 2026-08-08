@@ -4,11 +4,12 @@
     import VersionIcon from "$lib/components/projects/page/subpart/VersionIcon.svelte";
     import {formatFileDate} from "$lib/utils/ProjectUtils";
     import FileOptions from "$lib/components/projects/page/subpart/FileOptions.svelte";
+    import {resolve} from "$app/paths";
 
     export var file: BaseFile
 
     function openFile() {
-        goto(`/downloads/${file.project}/files/${file.id}`)
+        goto(resolve("/downloads/[slug]/files/[version]", { slug: file.project, version: file.id }))
     }
 </script>
 

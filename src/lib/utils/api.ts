@@ -31,3 +31,11 @@ export function getUploadedFileUrl(path: string, file: File) {
 
     return `${basePath}${path}${encodeURIComponent(file.name)}`;
 }
+
+export function getUploadedUrl(path: string, fileName: string) {
+    const basePath = PUBLIC_CND_PATH.endsWith("/")
+        ? PUBLIC_CND_PATH
+        : `${PUBLIC_CND_PATH}/`;
+
+    return `${basePath}${path}${fileName}`;
+}

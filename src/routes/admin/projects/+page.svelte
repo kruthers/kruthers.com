@@ -1,7 +1,7 @@
 <script lang="ts">
     import {api} from "$lib/utils/api";
     import type {MinecraftProject, ProjectBase} from "$lib/types/projects/ProjectData";
-    import ProjectCreationModal from "$lib/components/projects/ProjectCreationModal.svelte";
+    import ProjectCreationModal from "$lib/components/projects/forms/ProjectCreationModal.svelte";
     import Icon from "@iconify/svelte";
     import RawProjectCard from "$lib/components/projects/RawProjectCard.svelte";
     import {openModal} from "$lib/utils/Utils";

@@ -25,10 +25,11 @@ export default class CdnAPi {
         }
     }
 
-    async uploadFile(file: File, folder?: string): Promise<boolean> {
+    async uploadFile(file: File, folder?: string, fileName?: string): Promise<boolean> {
         if (!this.api.hasAuth()) return false
         const formData = new FormData()
         formData.append("file", file)
+        if (fileName) formData.append("file_name", fileName)
         const encodedPath = folder ? "?folder="+encodeURIComponent(folder) : ""
         const response = await this.api.postFormData(`files/upload${encodedPath}`, formData)
 
@@ -89,7 +90,7 @@ export default class CdnAPi {
 
     async deleteFile(path: string): Promise<boolean> {
         if (!this.api.hasAuth()) return false
-        const response = await this.api.delete(`files?path=${encodeURIComponent(path)}`)
+        const response = await this.api.delete(`files/file?path=${encodeURIComponent(path)}`)
         if (response?.ok) {
             sendToast({
                 message: "File deleted successfully",

@@ -75,7 +75,7 @@ export class SiteApi {
     async postFormData(path: string, body: FormData): Promise<Response | undefined> {
         if (this.authorization == "") return
 
-        return await fetch(path, {
+        return await this.fetch(path, {
             method: "POST",
             body
         })
@@ -109,10 +109,7 @@ export class SiteApi {
         if (this.authorization == "") return
 
         return await this.fetch(path, {
-            method: "DELETE",
-            headers: {
-                "Authorization": this.authorization,
-            }
+            method: "DELETE"
         })
     }
 
