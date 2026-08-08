@@ -20,11 +20,11 @@
 {#snippet projectEntries()}
     {#each projectPages as project (project.name)}
         <li>
-            <a href={project.path}>{project.name}</a>
+            <a href={resolve(project.path)}>{project.name}</a>
             {#if project.subPaths?.length ?? 0 > 0}
                 <ul>
                     {#each project.subPaths as subPath (subPath.name)}
-                        <li><a href={subPath.path}>
+                        <li><a href={resolve(subPath.path)}>
                             {#if subPath.icon}
                                 <Icon icon={subPath.icon} height="1.2em" />
                             {/if}
@@ -51,18 +51,20 @@
             <ul class="menu menu-horizontal px-1">
                 <li><a href={resolve("/posts")}>Posts</a></li>
                 <li>
-                    <details>
-                        <summary>Downloads</summary>
-                        <ul class="p-2 bg-base-100 w-40 z-1">
+                    <div class="dropdown">
+                        <div tabindex="0" role="button" class="w-full m-0 flex items-center gap-2">
+                            Downloads <Icon icon="mdi:arrow-down-drop" height="1.2em" />
+                        </div>
+                        <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                             {@render projectEntries()}
                         </ul>
-                    </details>
+                    </div>
                 </li>
                 <li><a href={resolve("/portfolio")}>Portfolio</a></li>
             </ul>
         </div>
         <div class="navbar-end">
-
+            <!-- TODO: site search at a later date -->
         </div>
     </div>
 
