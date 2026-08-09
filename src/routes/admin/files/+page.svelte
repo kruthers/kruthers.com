@@ -4,10 +4,10 @@
     import type { CdnFileEntry } from "$lib/types/api";
     import { FileType } from "$lib/types/api";
     import { api } from "$lib/utils/api";
-    import { PUBLIC_CND_PATH } from "$env/static/public";
     import Icon from "@iconify/svelte";
     import {findType, type SupportedType} from "$lib/types/FileTypes";
     import PageInfo from "$lib/components/PageInfo.svelte";
+    import {env} from "$env/dynamic/public";
 
     adminMeta.set({
         pages: [
@@ -60,9 +60,9 @@
     }
 
     function getDownloadUrl(entry: CdnFileEntry): string {
-        const cdnBase = PUBLIC_CND_PATH.endsWith("/")
-            ? PUBLIC_CND_PATH.slice(0, -1)
-            : PUBLIC_CND_PATH;
+        const cdnBase = env.PUBLIC_CND_PATH.endsWith("/")
+            ? env.PUBLIC_CND_PATH.slice(0, -1)
+            : env.PUBLIC_CND_PATH;
 
         return `${cdnBase}/${entry.name}`;
     }

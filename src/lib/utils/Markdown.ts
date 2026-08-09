@@ -1,16 +1,16 @@
 import {Carta} from "carta-md";
 import {attachment} from "@cartamd/plugin-attachment";
 import {api} from "$lib/utils/api";
-import {PUBLIC_CND_PATH} from "$env/static/public";
 import {code} from "@cartamd/plugin-code";
 import {emoji} from "@cartamd/plugin-emoji";
+import {env} from "$env/dynamic/public";
 
 export function getCarta(fileUpload: boolean = false, fileUploadPath: string = "cache/unknown/"): Carta {
     const attachmentExt = attachment({
         async upload(file: File): Promise<string | null> {
             const uploaded = await api.cdn.uploadFile(file, fileUploadPath)
             if (uploaded) {
-                return PUBLIC_CND_PATH + fileUploadPath + file.name
+                return env.PUBLIC_CND_PATH + fileUploadPath + file.name
             } else {
                 return null
             }
