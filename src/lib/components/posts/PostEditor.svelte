@@ -5,7 +5,6 @@
     import Icon from "@iconify/svelte";
     import {toTitleCase} from "$lib/utils/Utils";
     import {onDestroy, onMount} from "svelte";
-    import {setInterval} from "node:timers";
 
     type Props = {
         post: FullPost,
