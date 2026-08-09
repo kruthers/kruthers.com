@@ -3,12 +3,13 @@
     import PageInfo from "$lib/components/PageInfo.svelte";
     import PostsPage from "$lib/components/posts/PostsPage.svelte";
     import {resolve} from "$app/paths";
-    import {openModal, closeModal} from "$lib/utils/Utils";
+    import {openModal, closeModal, toTitleCase} from "$lib/utils/Utils";
     import PostOverview from "$lib/components/posts/PostOverview.svelte";
     import type {FullPost, Post} from "$lib/types/api";
     import Icon from "@iconify/svelte";
     import PostEditor from "$lib/components/posts/PostEditor.svelte";
     import {adminMeta} from "$lib/store/AdminStore";
+    import CommonProjectFormInputs from "$lib/components/projects/forms/CommonProjectFormInputs.svelte";
 
     adminMeta.set({
         pages: [
@@ -109,6 +110,12 @@
                             <button class="btn btn-sm btn-accent btn-outline max-md:w-16" onclick={() => editPost(post)}>
                                 <Icon icon="mdi:pencil" /> <span class="hidden lg:block">Edit</span>
                             </button>
+                            <button
+                                    class="btn btn-sm {post.hidden ? "btn-success" : "btn-info"} btn-outline max-md:w-16"
+                                    onclick={() => api.posts.setVisibility(post.id, post.hidden ?? true).then(() => refresh())}>
+                                <Icon icon={post.hidden ? "mdi:visibility" : "mdi:visibility-off"} />
+                                <span class="hidden lg:block">{post.hidden ? "Publish" : "Hide"}</span>
+                            </button>
                             <button class="btn btn-sm btn-error max-md:w-16" onclick={() => postToDelete = post}>
                                  <Icon icon="mdi:trash-can" /> <span class="hidden lg:block">Delete</span>
                             </button>
@@ -156,14 +163,13 @@
 
 {#if editingPost}
     <dialog id="edit-post" class="modal modal-open">
-        <div class="modal-box max-w-2xl">
-            {#await editingPost}
-                <span class="loading loading-spinner loading-lg"></span>
-            {:then post}
-                <h3 class="text-lg font-bold">Edit post</h3>
-                <PostEditor {post} onSave={savedPost} onCancel={cancelEdit} />
-            {/await}
-        </div>
+        {#await editingPost}
+            <div class="modal-box flex max-h-[92vh] w-11/12 max-w-7xl flex-col overflow-hidden p-0">
+                <span class="loading loading-spinner w-3xl"></span>
+            </div>
+        {:then post}
+            <PostEditor {post} onSave={savedPost} onCancel={cancelEdit} />
+        {/await}
     </dialog>
 {/if}
 

@@ -129,4 +129,27 @@ export default class PostsAPi {
         }
     }
 
+    public async setVisibility(id: string, visibility: boolean): Promise<boolean> {
+        if (!this.api.hasAuth()) return false
+        const response: Response | undefined = visibility ?
+            await this.api.post(`feed/${id}/publish`, undefined) :
+            await this.api.post(`feed/${id}/hide`, undefined)
+
+        if (response?.ok) {
+            sendToast({
+                message: visibility ? "Post published" : "Post hidden",
+                type: "success",
+            })
+            return true
+        } else {
+            console.log(`Failed to ${visibility ? "publish" : "hide"} post: ${response?.status}`)
+            console.log(await response?.text())
+            sendToast({
+                message: `Failed to ${visibility ? "publish" : "hide"} post`,
+                type: "error",
+            })
+            return false
+        }
+    }
+
 }

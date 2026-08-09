@@ -1,57 +1,75 @@
 <script lang="ts">
     import MarkdownEditorContainer from "$lib/components/MarkdownEditorContainer.svelte";
     import type {FullPost, PostUpdate} from "$lib/types/api";
-    import {api, getUploadedFileUrl} from "$lib/utils/api";
+    import {api, getUploadedFileUrl, getUploadedUrl} from "$lib/utils/api";
+    import Icon from "@iconify/svelte";
+    import {closeModal, toTitleCase} from "$lib/utils/Utils";
 
     type Props = {
         post: FullPost,
         onSave: (post: FullPost) => void,
         onCancel?: () => void
+        modalID?: string,
     }
 
-    const {post, onSave, onCancel}: Props = $props()
-    let title = $state(post.title);
-    let description = $state(post.description);
-    let tags = $state(post.tags.join(", "));
-    let content = $state(post.content);
-    let image = $state<string | null>(post.image);
-    let selectedImage = $state<File | undefined>();
+    const {post, onSave, onCancel, modalID = "edit-post"}: Props = $props()
+
     let saving = $state(false);
 
-    function handleImageChange(event: Event) {
-        const input = event.target as HTMLInputElement;
-        selectedImage = input.files?.[0];
+    let iconPreview: string | null = $state(post.image);
+    let content: string = $state(post.content);
 
-        if (selectedImage) {
-            image = URL.createObjectURL(selectedImage);
+    let tags: string[] = $state([...post.tags]);
+    let newTag: string = $state("");
+
+    function updateImagePreview(event: Event) {
+        const input = event.target as HTMLInputElement;
+        const file = input.files?.[0];
+        if (!file) return;
+        iconPreview = URL.createObjectURL(file);
+    }
+
+    function addTag() {
+        const tag = newTag.trim();
+
+        if (tag.length === 0 || tags.includes(tag)) {
+            newTag = "";
+            return;
         }
+
+        tags = [...tags, tag];
+        newTag = "";
+    }
+
+    function removeTag(tag: string) {
+        tags = tags.filter(t => t !== tag);
     }
 
     async function savePost(event: SubmitEvent) {
         event.preventDefault();
-
         if (saving) return;
-
         saving = true;
+        const data = new FormData(event.currentTarget as HTMLFormElement);
 
         let savedImage = post.image;
-
-        if (selectedImage) {
-            const uploaded = await api.cdn.uploadFile(selectedImage, "posts/icons/");
-
-            if (!uploaded) {
-                saving = false;
-                return;
+        const imageFile = data.get("image");
+        if (imageFile instanceof File && imageFile.size > 0) {
+            console.log(`Uploading new image...`)
+            const fileName = `${post.id}.${imageFile.name.split(".").pop()}`
+            const uploadPath = `"posts/icons/"`;
+            const uploaded = await api.cdn.uploadFile(imageFile, uploadPath, fileName);
+            if (uploaded) {
+                const url = getUploadedUrl(uploadPath, fileName);
+                console.log(`Uploaded image to ${url}`)
+                savedImage = url;
             }
-
-            savedImage = getUploadedFileUrl("posts/icons/", selectedImage);
         }
 
         const update: PostUpdate = {
-            title,
-            description,
+            title: data.get("title") as string,
+            description: data.get("description") as string,
             content,
-            tags: tags.split(",").map(tag => tag.trim()).filter(Boolean),
+            tags: tags.filter(Boolean),
             image: savedImage,
             hidden: post.hidden
         };
@@ -73,106 +91,138 @@
 
 </script>
 
-<form class="flex flex-col gap-5" onsubmit={savePost}>
-    <fieldset class="fieldset">
-        <legend class="fieldset-legend">Image</legend>
-
-        {#if image}
-            <div class="overflow-hidden rounded-box border border-base-300 bg-base-200">
-                <img
-                        class="max-h-64 w-full object-cover"
-                        src={image}
-                        alt={title}
-                />
-            </div>
-        {/if}
-
-        <input
-                class="file-input w-full"
-                type="file"
-                name="image"
-                accept="image/*"
-                onchange={handleImageChange}
-        />
-
-        <p class="text-xs opacity-70">
-            Upload a new image to replace the current post image.
-        </p>
-    </fieldset>
-
-    <fieldset class="fieldset">
-        <legend class="fieldset-legend">Title</legend>
-
-        <input
-                class="input w-full validator"
-                type="text"
-                bind:value={title}
-                maxlength="128"
-                required
-                placeholder="Post title"
-                pattern="[a-zA-Z0-9 \-_!*'@$%&^£]+"
-        />
-
-        <p class="validator-hint">
-            Required, must only use letters, numbers and basic special characters
-        </p>
-    </fieldset>
-
-    <fieldset class="fieldset">
-        <legend class="fieldset-legend">Description</legend>
-
-        <textarea
-                class="textarea min-h-28 w-full validator"
-                bind:value={description}
-                maxlength="256"
-                required
-                placeholder="Short post description"
-        ></textarea>
-
-        <p class="validator-hint">Required</p>
-    </fieldset>
-
-    <fieldset class="fieldset">
-        <legend class="fieldset-legend">Tags</legend>
-
-        <input
-                class="input w-full"
-                type="text"
-                bind:value={tags}
-                placeholder="Update, Project, Release"
-        />
-
-        <p class="text-xs opacity-70">Separate tags with commas.</p>
-    </fieldset>
-
-    <fieldset class="fieldset">
-        <legend class="fieldset-legend">Content</legend>
-
-        <MarkdownEditorContainer
-                bind:value={content}
-                fileUploadPath="posts/content/"
-        />
-    </fieldset>
-
-    <div class="modal-action">
-        {#if onCancel}
-            <button
-                    class="btn"
-                    type="button"
-                    onclick={onCancel}
-                    disabled={saving}
-            >
-                Cancel
+<div class="modal-box flex max-h-[92vh] w-11/12 max-w-7xl flex-col overflow-hidden p-0">
+    <div class="border-b border-base-300 bg-base-200/80 px-5 py-4 sm:px-6">
+        <div class="flex items-start justify-between gap-4">
+            <h2 class="text-2xl font-bold">Edit Post</h2>
+            <button class="btn btn-circle btn-ghost" type="button" onclick={onCancel}>
+                <Icon icon="mdi:close" width="1.4em" height="1.4em" />
             </button>
-        {/if}
-
-        <button class="btn btn-secondary" type="submit" disabled={saving}>
-            {#if saving}
-                <span class="loading loading-spinner loading-sm"></span>
-                Saving...
-            {:else}
-                Save post
-            {/if}
-        </button>
+        </div>
     </div>
-</form>
+
+    <form class="min-h-0 flex-1 overflow-y-auto" onsubmit={savePost}>
+        <div class="flex flex-col gap-5 p-5 sm:p-6">
+            <section class="rounded-3xl border border-base-300 bg-base-200/70 p-4 shadow-sm">
+                <h3 class="mb-4 flex items-center gap-2 text-lg font-bold">
+                    <Icon icon="mdi:email-newsletter" width="1.2em" height="1.2em" />
+                    Basic Details
+                </h3>
+
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-legend">Icon</legend>
+
+                        <label
+                                class="group relative block size-48 cursor-pointer overflow-hidden rounded-3xl border border-base-300 bg-base-100 shadow-sm transition hover:border-primary hover:shadow-lg"
+                                for={`${modalID}-icon`}
+                        >
+                            {#if iconPreview}
+                                <img src={iconPreview} alt="Post preview" class="h-full w-full object-cover transition duration-300"/>
+                            {:else}
+                                <div class="flex h-full w-full items-center justify-center bg-base-300/50">
+                                    <Icon icon="mdi:image" width="2em" height="2em" />
+                                </div>
+                            {/if}
+
+                            <div class="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-base-300/50 opacity-0 transition-opacity group-hover:opacity-100">
+                                <Icon icon="mdi:upload" width="1.8em" height="1.8em" />
+                                <span class="text-xs font-semibold">Upload Icon</span>
+                            </div>
+                        </label>
+
+                        <input id={`${modalID}-icon`} class="hidden" type="file" name="icon" accept="image/*" onchange={(event) => updateImagePreview(event)} disabled={saving}/>
+                        <p class="label text-xs text-base-content/60">Click the image to upload a square icon.</p>
+                    </fieldset>
+
+                    <div class="w-full">
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">Title</legend>
+                            <input class="input w-full validator" type="text" maxlength="128" required placeholder="Post title" pattern="[a-zA-Z0-9 \-_!*'@$%&^£]+"/>
+                            <p class="validator-hint">Required, must only use letters, numbers and basic special characters</p>
+                        </fieldset>
+
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">Description</legend>
+                            <textarea class="textarea min-h-18 w-full validator" maxlength="256" required placeholder="Short post description"></textarea>
+                            <p class="validator-hint">Required</p>
+                        </fieldset>
+                    </div>
+                </div>
+            </section>
+
+            <section class="rounded-3xl border border-base-300 bg-base-200/70 p-4 shadow-sm">
+                <h3 class="mb-4 flex items-center gap-2 text-lg font-bold">
+                    <Icon icon="mdi:tag-multiple-outline" width="1.2em" height="1.2em" />
+                    Project Tags
+                </h3>
+
+                <div class="flex flex-col gap-3 lg:flex-row lg:items-end">
+                    <fieldset class="fieldset shrink-0">
+                        <legend class="fieldset-legend">Add Tag</legend>
+                        <div class="join w-full sm:w-64">
+                            <input
+                                    class="input join-item w-full" type="text" placeholder="Tag name" bind:value={newTag}
+                                    disabled={saving}
+                                    onkeydown={(event) => {
+                                        if (event.key === "Enter") {
+                                            event.preventDefault();
+                                            addTag();
+                                        }
+                                    }}
+                            />
+                            <button class="btn btn-primary join-item" type="button" onclick={addTag} disabled={saving}>
+                                Add
+                            </button>
+                        </div>
+                    </fieldset>
+
+                    <div class="min-w-0 flex-1 lg:pb-2">
+                        {#if tags.length > 0}
+                            <div class="flex flex-wrap gap-2">
+                                {#each tags as tag (tag)}
+                                    <span class="badge badge-secondary badge-soft gap-2">
+                                        {toTitleCase(tag)}
+                                        <button type="button" class="cursor-pointer" onclick={() => removeTag(tag)} disabled={saving}>
+                                            <Icon icon="mdi:delete-outline" height="1em" />
+                                        </button>
+                                    </span>
+                                {/each}
+                            </div>
+                        {:else}
+                            <p class="rounded-2xl border border-dashed border-base-300 bg-base-100/50 px-4 py-3 text-center text-sm text-base-content/60 lg:text-left">
+                                No tags added yet.
+                            </p>
+                        {/if}
+                    </div>
+                </div>
+            </section>
+
+            <section class="rounded-3xl border border-base-300 bg-base-200/70 p-4 shadow-sm min-h-120">
+                <h3 class="mb-4 flex items-center gap-2 text-lg font-bold">
+                    <Icon icon="mdi:newspaper" width="1.2em" height="1.2em" />
+                    Post Content
+                </h3>
+                <MarkdownEditorContainer bind:value={content} fileUploadPath="posts/content/"/>
+            </section>
+        </div>
+
+        <div class="sticky bottom-0 z-10 border-t border-base-300 bg-base-200/95 px-5 py-4 backdrop-blur sm:px-6">
+            <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <button class="btn btn-ghost" type="button" onclick={onCancel} disabled={saving}>
+                    Cancel
+                </button>
+
+                <button class="btn btn-primary" type="submit" disabled={saving}>
+                    {#if saving}
+                        <span class="loading loading-spinner loading-sm"></span>
+                        Saving...
+                    {:else}
+                        <Icon icon="mdi:content-save-outline" width="1.2em" height="1.2em" />
+                        Save Post
+                    {/if}
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

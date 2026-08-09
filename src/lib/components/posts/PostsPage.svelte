@@ -34,7 +34,7 @@
 </script>
 
 
-<section class="w-full flex flex-col gap-4 px-4 py-6 lg:px-8">
+<section class="w-full flex flex-col gap-4 rounded-3xl border border-base-300 bg-base-200/40 p-4 shadow-sm sm:p-6">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
             {@render header()}
