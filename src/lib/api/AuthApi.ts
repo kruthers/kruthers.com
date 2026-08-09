@@ -1,6 +1,6 @@
 import {SiteApi} from "$lib/api/SiteApi";
 import {sendToast} from "$lib/store/Toasts";
-import type {Token} from "$lib/types/api";
+import type {LegacyResponse, Token} from "$lib/types/api";
 
 export default class AuthApi {
     private readonly api: SiteApi
@@ -9,8 +9,8 @@ export default class AuthApi {
         this.api = api
     }
 
-    async getLink() {
-        const response = await this.api.get("auth/link")
+    async getLink(legacy: boolean = false) {
+        const response = await this.api.get(`auth/link?legacy=${legacy}`)
         if (response.ok) {
             return await response.text()
         } else return ""
@@ -21,6 +21,20 @@ export default class AuthApi {
         if (response.ok) {
             return await response.text()
         } else return null
+    }
+
+    async authorizeLegacy(code: string): Promise<LegacyResponse> {
+        const response = await this.api.get(`auth/authorize/legacy?code=${code}`)
+        if (response.ok) {
+            return await response.json() as LegacyResponse
+        } else {
+            console.log("Failed to authorize")
+            console.log(await response.text())
+            return {
+                success: false,
+                message: "An unknown exception occurred. Please try again later."
+            }
+        }
     }
 
     async isValid(): Promise<boolean> {

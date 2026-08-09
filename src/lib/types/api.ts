@@ -73,4 +73,8 @@ export type PostUpdate = {
     hidden?: boolean
 }
 
+export interface LegacyResponse {
+    success: boolean,
+    message: string
+}
 
