@@ -4,6 +4,8 @@
     import {api, getUploadedUrl} from "$lib/utils/api";
     import Icon from "@iconify/svelte";
     import {toTitleCase} from "$lib/utils/Utils";
+    import {onDestroy, onMount} from "svelte";
+    import {setInterval} from "node:timers";
 
     type Props = {
         post: FullPost,
@@ -45,11 +47,18 @@
         tags = tags.filter(t => t !== tag);
     }
 
-    async function savePost(event: SubmitEvent) {
+    async function processForm(event: SubmitEvent) {
         event.preventDefault();
+        const data = new FormData(event.currentTarget as HTMLFormElement);
+        const post = await savePost(data)
+        if (post) {
+            onSave(post)
+        }
+    }
+
+    async function savePost(data: FormData): Promise<FullPost | undefined> {
         if (saving) return;
         saving = true;
-        const data = new FormData(event.currentTarget as HTMLFormElement);
 
         let savedImage = post.image;
         const imageFile = data.get("image");
@@ -79,15 +88,34 @@
         saving = false;
 
         if (saved) {
-            onSave({
+            return {
                 ...post,
                 ...update,
                 image: savedImage,
                 tags: update.tags ?? [],
                 content
-            });
+            }
         }
     }
+
+    let timeout: ReturnType<typeof setInterval> | null = null;
+
+    onMount(() => {
+        timeout = setInterval(() => {
+            const element = window.document.getElementById(`${modalID}-form`)
+            if (element) {
+                const form = element as HTMLFormElement
+                const data = new FormData(form)
+                savePost(data)
+            }
+        }, 20000)
+    })
+
+    onDestroy(() => {
+        if (timeout) {
+            clearInterval(timeout)
+        }
+    })
 
 </script>
 
@@ -101,7 +129,7 @@
         </div>
     </div>
 
-    <form class="min-h-0 flex-1 overflow-y-auto" onsubmit={savePost}>
+    <form class="min-h-0 flex-1 overflow-y-auto" onsubmit={processForm} id="{modalID}-form}">
         <div class="flex flex-col gap-5 p-5 sm:p-6">
             <section class="rounded-3xl border border-base-300 bg-base-200/70 p-4 shadow-sm">
                 <h3 class="mb-4 flex items-center gap-2 text-lg font-bold">
@@ -140,7 +168,7 @@
                             <legend class="fieldset-legend">Title</legend>
                             <input
                                     class="input w-full validator" type="text" maxlength="128" required
-                                    placeholder="Post title" value={post.title}
+                                    placeholder="Post title" value={post.title} name="title"
                             />
                             <p class="validator-hint">Required, must only use letters, numbers and basic special characters</p>
                         </fieldset>
@@ -149,7 +177,7 @@
                             <legend class="fieldset-legend">Description</legend>
                             <textarea
                                     class="textarea min-h-18 w-full validator" maxlength="256" required
-                                    placeholder="Short post description"
+                                    placeholder="Short post description" name="description"
                             >{post.description}</textarea>
                             <p class="validator-hint">Required</p>
                         </fieldset>
@@ -169,7 +197,6 @@
                         <div class="join w-full sm:w-64">
                             <input
                                     class="input join-item w-full" type="text" placeholder="Tag name" bind:value={newTag}
-                                    disabled={saving}
                                     onkeydown={(event) => {
                                         if (event.key === "Enter") {
                                             event.preventDefault();
@@ -177,7 +204,7 @@
                                         }
                                     }}
                             />
-                            <button class="btn btn-primary join-item" type="button" onclick={addTag} disabled={saving}>
+                            <button class="btn btn-primary join-item" type="button" onclick={addTag}>
                                 Add
                             </button>
                         </div>
@@ -189,7 +216,7 @@
                                 {#each tags as tag (tag)}
                                     <span class="badge badge-secondary badge-soft gap-2">
                                         {toTitleCase(tag)}
-                                        <button type="button" class="cursor-pointer" onclick={() => removeTag(tag)} disabled={saving}>
+                                        <button type="button" class="cursor-pointer" onclick={() => removeTag(tag)} >
                                             <Icon icon="mdi:delete-outline" height="1em" />
                                         </button>
                                     </span>
