@@ -15,7 +15,7 @@ export default class PostsAPi {
             return await response.json() as PostsPage
         } else {
             console.log("Failed to get posts")
-            console.log(await response.json())
+            console.log(await response.text())
             sendToast({
                 message: "Failed to get posts",
                 type: "error",
@@ -30,7 +30,7 @@ export default class PostsAPi {
             return await response.json() as FullPost
         } else {
             console.log("Failed to get post")
-            console.log(await response.json())
+            console.log(await response.text())
             sendToast({
                 message: "Failed to get post",
                 type: "error",

@@ -23,7 +23,7 @@
 <div class="card overflow-hidden bg-primary text-primary-content shadow-sm {linkClass}">
     <div class="flex flex-col md:flex-row">
         {#if post.image}
-            <figure class="relative h-52 w-full shrink-0 md:h-auto md:w-64 lg:w-72">
+            <figure class="relative h-48 w-full shrink-0 md:h-auto md:w-52 lg:w-64">
                 <img
                     class="h-full w-full object-cover"
                     src={post.image}
@@ -33,7 +33,7 @@
                 {#if showDate}
                     <div class="absolute right-3 top-3 md:hidden">
                         <span class="badge badge-secondary shadow">
-                            <FormattedDate date={post.published} includeTime={false} />
+                            Posted <FormattedDate date={post.published} includeTime={false} />
                         </span>
                     </div>
                 {/if}
@@ -48,7 +48,9 @@
 
                 {#if showDate}
                     <div class:hidden={post.image} class="ml-auto shrink-0 text-right text-sm opacity-90 md:block">
-                        <FormattedDate date={post.published} includeTime={false} />
+                        <span class="badge badge-accent badge-soft shadow">
+                            Posted <FormattedDate date={post.published} includeTime={false} />
+                        </span>
                     </div>
                 {/if}
             </div>

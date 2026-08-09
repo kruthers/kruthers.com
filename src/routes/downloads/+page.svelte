@@ -15,11 +15,6 @@
         <header class="rounded-3xl border border-base-300 bg-linear-to-br from-base-100 via-base-200 to-base-300 shadow-sm">
             <div class="relative p-6 sm:p-8 lg:p-10">
                 <div class="max-w-3xl">
-                    <div class="badge badge-soft badge-primary flex items-center gap-2">
-                        <Icon icon="mdi:download" height="1.2em" />
-                        Project Downloads
-                    </div>
-
                     <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">
                         Downloads
                     </h1>
