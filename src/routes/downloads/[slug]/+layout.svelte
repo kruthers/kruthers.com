@@ -6,7 +6,6 @@
     import MinecraftProjectExtras from "$lib/components/projects/minecraft/MinecraftProjectExtras.svelte";
     import {resolve} from "$app/paths";
     import ProjectPageError from "$lib/components/projects/page/ProjectPageError.svelte";
-    import {setProjectPageContext} from "$lib/utils/ProjectContext";
     import {page} from "$app/state";
     import { userToken } from "$lib/utils/api";
     import Icon from "@iconify/svelte";
@@ -29,9 +28,8 @@
     }
 </script>
 
-{#snippet pageContent(project: ProjectBase)}
+{#snippet pageContent()}
     <!--Needed to allow setting of context during component creation-->
-    {@const proj = setProjectPageContext({project})}
     <div class="flex min-w-0 flex-col gap-4">
         <div class="rounded-3xl border border-base-300 bg-base-200/70 p-2 shadow-sm">
             <div role="tablist" class="tabs tabs-box bg-transparent">
@@ -69,10 +67,10 @@
 
                 {#if project.group === "MINECRAFT"}
                     <MinecraftProjectExtras project={project}>
-                        {@render pageContent(project)}
+                        {@render pageContent()}
                     </MinecraftProjectExtras>
                 {:else}
-                    {@render pageContent(project)}
+                    {@render pageContent()}
                 {/if}
             {/if}
         {:catch}

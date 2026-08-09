@@ -1,24 +1,27 @@
 <script lang="ts">
     import type { PageProps } from './$types';
     import MinecraftFileList from "$lib/components/projects/minecraft/MinecraftFileList.svelte";
-    import type {BaseFile} from "$lib/types/projects/FileData";
     import ProjectFilesList from "$lib/components/projects/page/ProjectFilesList.svelte";
     import ProjectPageError from "$lib/components/projects/page/ProjectPageError.svelte";
-    import {getProjectPageContext} from "$lib/utils/ProjectContext";
+    import {onMount} from "svelte";
 
     const { data } : PageProps  = $props();
-    const {project} = getProjectPageContext();
+    let group: string = $state("")
 
-    const filesPromise: Promise<BaseFile[]> = data.files;
+    onMount(() => {
+        data.project.then(result => {
+            group = result?.group ?? ""
+        })
+    })
 </script>
 
 <section class="min-w-0 rounded-3xl border border-base-300 bg-base-200/60 p-4 shadow-sm sm:p-6">
-    {#await filesPromise}
+    {#await data.files}
         <div class="flex min-h-64 items-center justify-center">
             <span class="loading loading-bars loading-xl"></span>
         </div>
     {:then files}
-        {#if project.group === "MINECRAFT"}
+        {#if group === "MINECRAFT"}
             <MinecraftFileList files={files} />
         {:else}
             <ProjectFilesList files={files} />
