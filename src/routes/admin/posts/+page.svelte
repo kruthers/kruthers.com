@@ -3,13 +3,12 @@
     import PageInfo from "$lib/components/PageInfo.svelte";
     import PostsPage from "$lib/components/posts/PostsPage.svelte";
     import {resolve} from "$app/paths";
-    import {openModal, closeModal, toTitleCase} from "$lib/utils/Utils";
+    import {openModal, closeModal} from "$lib/utils/Utils";
     import PostOverview from "$lib/components/posts/PostOverview.svelte";
     import type {FullPost, Post} from "$lib/types/api";
     import Icon from "@iconify/svelte";
     import PostEditor from "$lib/components/posts/PostEditor.svelte";
     import {adminMeta} from "$lib/store/AdminStore";
-    import CommonProjectFormInputs from "$lib/components/projects/forms/CommonProjectFormInputs.svelte";
 
     adminMeta.set({
         pages: [
@@ -187,7 +186,7 @@
                 <legend class="fieldset-legend">Title</legend>
                 <input
                     class="input w-full validator" type="text" name="title" maxlength="128"
-                    required placeholder="Post title" pattern="[a-zA-Z0-9 \-_!*'@$%&^£]+"
+                    required placeholder="Post title"
                 />
                 <p class="validator-hint">Required, must only use letters, numbers and basic special characters</p>
             </fieldset>

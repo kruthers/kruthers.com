@@ -1,18 +1,31 @@
 <script lang="ts">
     import type {PageProps} from "./$types";
-    import {toTitleCase} from "$lib/utils/Utils";
+    import {closeModal, openModal, toTitleCase} from "$lib/utils/Utils";
     import Icon from "@iconify/svelte";
     import FormattedDate from "$lib/components/FormattedDate.svelte";
     import MarkdownContainer from "$lib/components/MarkdownContainer.svelte";
     import {resolve} from "$app/paths";
+    import { userToken } from "$lib/utils/api";
+    import PostEditor from "$lib/components/posts/PostEditor.svelte";
 
     const { data }: PageProps = $props();
+
+    function savedPost() {
+        closeModal("edit-post")
+        window.location.reload()
+    }
+
+    function cancelEdit() {
+        closeModal("edit-post")
+    }
 
 </script>
 
 <main class="mx-auto flex w-full max-w-7xl flex-col gap-4 p-4 sm:p-6">
     {#await data.post}
-
+        <div class="flex min-h-96 items-center justify-center rounded-3xl border border-base-300 bg-base-200/60">
+            <span class="loading loading-bars loading-xl"></span>
+        </div>
     {:then post}
         {#if post}
             <header class="overflow-hidden rounded-3xl border border-base-300 bg-linear-to-br from-base-200 to-base-300 shadow-sm">
@@ -84,6 +97,11 @@
                     </section>
                 </div>
             </div>
+            {#if $userToken}
+                <dialog id="edit-post" class="modal ">
+                    <PostEditor {post} onSave={savedPost} onCancel={cancelEdit} />
+                </dialog>
+            {/if}
         {:else}
             <div class="alert alert-warning alert-soft block justify-center">
                 <div class="flex w-full flex-col items-center justify-center gap-3 p-14 text-center">
@@ -111,3 +129,11 @@
         </div>
     {/await}
 </main>
+
+{#if $userToken}
+    <div class="fab">
+        <button class="btn rounded-box btn-lg btn-secondary" onclick={() => openModal("edit-post")}>
+            <Icon icon="mdi:file-document-edit" height="1.2em" /> Edit Post
+        </button>
+    </div>
+{/if}

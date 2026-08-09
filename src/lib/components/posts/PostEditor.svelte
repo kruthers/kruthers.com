@@ -1,9 +1,9 @@
 <script lang="ts">
     import MarkdownEditorContainer from "$lib/components/MarkdownEditorContainer.svelte";
     import type {FullPost, PostUpdate} from "$lib/types/api";
-    import {api, getUploadedFileUrl, getUploadedUrl} from "$lib/utils/api";
+    import {api, getUploadedUrl} from "$lib/utils/api";
     import Icon from "@iconify/svelte";
-    import {closeModal, toTitleCase} from "$lib/utils/Utils";
+    import {toTitleCase} from "$lib/utils/Utils";
 
     type Props = {
         post: FullPost,
@@ -138,13 +138,19 @@
                     <div class="w-full">
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">Title</legend>
-                            <input class="input w-full validator" type="text" maxlength="128" required placeholder="Post title" pattern="[a-zA-Z0-9 \-_!*'@$%&^£]+"/>
+                            <input
+                                    class="input w-full validator" type="text" maxlength="128" required
+                                    placeholder="Post title" value={post.title}
+                            />
                             <p class="validator-hint">Required, must only use letters, numbers and basic special characters</p>
                         </fieldset>
 
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">Description</legend>
-                            <textarea class="textarea min-h-18 w-full validator" maxlength="256" required placeholder="Short post description"></textarea>
+                            <textarea
+                                    class="textarea min-h-18 w-full validator" maxlength="256" required
+                                    placeholder="Short post description"
+                            >{post.description}</textarea>
                             <p class="validator-hint">Required</p>
                         </fieldset>
                     </div>
