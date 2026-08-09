@@ -25,8 +25,8 @@ export default class CdnAPi {
         }
     }
 
-    async uploadFile(file: File, folder?: string, fileName?: string): Promise<boolean> {
-        if (!this.api.hasAuth()) return false
+    async uploadFile(file: File, folder?: string, fileName?: string): Promise<string | null> {
+        if (!this.api.hasAuth()) return null
         const formData = new FormData()
         formData.append("file", file)
         if (fileName) formData.append("file_name", fileName)
@@ -38,13 +38,13 @@ export default class CdnAPi {
                 message: "File uploaded successfully",
                 type: "success",
             })
-            return true
+            return response.text()
         }
         sendToast({
             message: "Failed to upload file",
             type: "error",
         })
-        return false
+        return null
     }
 
 

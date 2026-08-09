@@ -1,15 +1,15 @@
 import {Carta} from "carta-md";
 import {attachment} from "@cartamd/plugin-attachment";
-import {api, getUploadedUrl} from "$lib/utils/api";
+import {api} from "$lib/utils/api";
 import {code} from "@cartamd/plugin-code";
 import {emoji} from "@cartamd/plugin-emoji";
 
 export function getCarta(fileUpload: boolean = false, fileUploadPath: string = "cache/unknown/"): Carta {
     const attachmentExt = attachment({
         async upload(file: File): Promise<string | null> {
-            const uploaded = await api.cdn.uploadFile(file, fileUploadPath)
-            if (uploaded) {
-                return getUploadedUrl(fileUploadPath, file.name)
+            const result = await api.cdn.uploadFile(file, fileUploadPath)
+            if (result) {
+                return result
             } else {
                 return null
             }

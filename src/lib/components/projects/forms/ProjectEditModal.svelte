@@ -5,7 +5,7 @@
     import CommonProjectFormInputs from "$lib/components/projects/forms/CommonProjectFormInputs.svelte";
     import MarkdownEditorContainer from "$lib/components/MarkdownEditorContainer.svelte";
     import Icon from "@iconify/svelte";
-    import {api, getUploadedUrl} from "$lib/utils/api";
+    import {api} from "$lib/utils/api";
 
     type Props = {
         group: string,
@@ -84,11 +84,10 @@
             console.log(`Uploading new ${type}...`)
             const fileName = `project-${type}.${imageFile.name.split(".").pop()}`
             const uploadPath = `cache/${project.id}/`;
-            const uploaded = await api.cdn.uploadFile(imageFile, uploadPath, fileName);
-            if (!uploaded) return;
-            const url = getUploadedUrl(uploadPath, fileName);
-            console.log(`Uploaded ${type} to ${url}`)
-            return url;
+            const result = await api.cdn.uploadFile(imageFile, uploadPath, fileName);
+            if (!result) return;
+            console.log(`Uploaded ${type} to ${result}`)
+            return result;
         }
 
         return;

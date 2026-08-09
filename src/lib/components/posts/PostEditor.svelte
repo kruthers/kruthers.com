@@ -1,7 +1,7 @@
 <script lang="ts">
     import MarkdownEditorContainer from "$lib/components/MarkdownEditorContainer.svelte";
     import type {FullPost, PostUpdate} from "$lib/types/api";
-    import {api, getUploadedUrl} from "$lib/utils/api";
+    import {api} from "$lib/utils/api";
     import Icon from "@iconify/svelte";
     import {toTitleCase} from "$lib/utils/Utils";
     import {onDestroy, onMount} from "svelte";
@@ -66,11 +66,10 @@
             console.log(`Uploading new image...`)
             const fileName = `${post.id}.${imageFile.name.split(".").pop()}`
             const uploadPath = `"posts/icons/"`;
-            const uploaded = await api.cdn.uploadFile(imageFile, uploadPath, fileName);
-            if (uploaded) {
-                const url = getUploadedUrl(uploadPath, fileName);
-                console.log(`Uploaded image to ${url}`)
-                savedImage = url;
+            const result = await api.cdn.uploadFile(imageFile, uploadPath, fileName);
+            if (result) {
+                console.log(`Uploaded image to ${result}`)
+                savedImage = result;
             }
         }
 

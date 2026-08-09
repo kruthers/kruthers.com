@@ -2,7 +2,7 @@
     import type {ProjectBase} from "$lib/types/projects/ProjectData";
     import type {Snippet} from "svelte";
     import type {BaseFile, RawFile} from "$lib/types/projects/FileData";
-    import {api, getUploadedFileUrl} from "$lib/utils/api";
+    import {api} from "$lib/utils/api";
     import {closeModal} from "$lib/utils/Utils";
     import Icon from "@iconify/svelte";
     import MarkdownEditorContainer from "$lib/components/MarkdownEditorContainer.svelte";
@@ -44,19 +44,16 @@
         console.log("Uploading version file...")
         const file = formData.get("file") as File
         const filePath = `downloads/${project.id}/${versionFile.id}/`
-        api.cdn.uploadFile(file, filePath).then(success => {
-            if (success) {
+        api.cdn.uploadFile(file, filePath).then(result => {
+            if (result) {
                 console.log(`Uploaded file for ${versionFile.version} of ${project.id} successfully!`)
+                //update the version file
+                console.log("Publishing version file location to API...")
+                api.projects.updateFileLink(project.id, versionFile.id, result)
             } else {
                 console.log(`Failed to upload file for ${versionFile.version} of ${project.id}`)
             }
         })
-
-        console.log("Publishing version file location to API...")
-        //update the file location
-        const downloadPath = getUploadedFileUrl(filePath, file)
-        //update the version file
-        await api.projects.updateFileLink(project.id, versionFile.id, downloadPath)
 
         console.log("Publishing version changelog to API...")
         //update the changelog for the project

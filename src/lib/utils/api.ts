@@ -22,19 +22,3 @@ userToken.subscribe((data) => {
         localStorage.removeItem("token")
     }
 })
-
-export function getUploadedFileUrl(path: string, file: File) {
-    const basePath = env.PUBLIC_CND_PATH.endsWith("/")
-        ? env.PUBLIC_CND_PATH
-        : `${env.PUBLIC_CND_PATH}/`;
-
-    return `${basePath}${path}${encodeURIComponent(file.name)}`;
-}
-
-export function getUploadedUrl(path: string, fileName: string) {
-    const basePath = env.PUBLIC_CND_PATH.endsWith("/")
-        ? env.PUBLIC_CND_PATH
-        : `${env.PUBLIC_CND_PATH}/`;
-
-    return `${basePath}${path}${fileName}`;
-}

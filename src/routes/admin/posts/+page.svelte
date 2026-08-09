@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {api, getUploadedFileUrl} from "$lib/utils/api";
+    import {api} from "$lib/utils/api";
     import PageInfo from "$lib/components/PageInfo.svelte";
     import PostsPage from "$lib/components/posts/PostsPage.svelte";
     import {resolve} from "$app/paths";
@@ -61,14 +61,14 @@
         let image: string | null = null;
 
         if (imageFile instanceof File && imageFile.size > 0) {
-            const uploaded = await api.cdn.uploadFile(imageFile, "posts/icons/");
+            const result = await api.cdn.uploadFile(imageFile, "posts/icons/");
 
-            if (!uploaded) {
+            if (result == null) {
                 creatingPost = false;
                 return;
             }
 
-            image = getUploadedFileUrl("posts/icons/", imageFile);
+            image = result
         }
 
         const created = await api.posts.createPost({
